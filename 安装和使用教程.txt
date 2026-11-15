@@ -1,229 +1,128 @@
-﻿YunOS 安装和使用教程
-====================
+﻿YunOS 安装和使用教程（公开版 0.2.0）
+===================================
 
-这份教程面向第一次下载源码的 Windows 用户。
-建议先用浏览器版完成导入和搜索，确认能用后，再考虑桌面版。
-所有命令都在 PowerShell 中执行，不需要以管理员身份运行。
+一、第一次打开
 
-一、先了解你下载的是什么
+1. 下载 Start-YunOS.bat：
+   https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.0/Start-YunOS.bat
+2. 把它保存到桌面或自己容易找到的位置，再双击。
+3. 第一次需要联网。程序会下载自身文件和独立 Python 运行环境，
+   校验后自动启动。你不需要手工安装 Python、Node.js、Git 或数据库。
+4. 有 Edge / Chrome 时优先打开独立应用窗口，否则打开默认浏览器。
+5. 以后双击同一个 BAT 即可。下载完成后，日常保存、阅读和搜索可离线使用。
 
-本仓库提供源码，不附带聊天数据库、API Key 或现成安装包。
-基础功能是把自己的聊天导出包导入本机，然后搜索和阅读原文。
-AI 对话、语义检索、目标与计划需要额外配置，不在基础安装中自动启用。
-普通关键词搜索不需要付费模型，也不需要填写 API Key。
+也可以下载完整启动包 ZIP，解压后双击其中的 Start-YunOS.bat。
+不要直接在压缩包预览窗口里运行；先解压。
 
-二、准备环境
+系统范围：Windows 10 / 11。BAT 不能直接用于 macOS 或 Linux。
+已在 Windows x64 测试；x86、ARM64 对应下载分支尚未做实机验收。
+首次需要能连接 GitHub 和 python.org。网络不通时会显示错误，不会清空资料。
+如果下载受到公司策略或安全软件限制，不要关闭安全软件，先核对限制原因。
 
-1. 安装 Python 3.13，并确认终端可以识别：
+二、导入文件
 
-   py -3.13 --version
+1. 点击左下角“设置”。
+2. 在设置中进入“资料导入”。这是设置里的二级页面，不是另一个小程序。
+3. 在“导入文件”中点击虚线框选择文件，也可以把文件直接拖到框内。
+4. 支持 TXT、MD、Markdown。每个最多 5 MB；每批最多 50 个、合计 10 MB。
+5. 可选填写来源，编码通常保持“自动识别”。
+6. 点击“检查并预览”，核对文字和结果。
+7. 点击“确认导入”。界面会显示新增、重复、失败的数量。
 
-   如果提示找不到 py，请检查 Python 安装，安装后重新打开终端。
-   若电脑只有 python 命令，先用 python --version 确认版本，再用它替换
-   后面创建虚拟环境的 py -3.13。后续均使用项目内的 Python 路径。
+当前不支持直接解析 PDF、Word、图片、音频、微信数据库和聊天 ZIP。
+需要保存这些材料中的文字时，可以先复制正文，再用“粘贴文字”。
+Markdown 当前按文字显示，保留原文，不执行其中的 HTML 或脚本。
 
-2. 下载源码，有两种方式：
+三、保存微信消息或随手记录
 
-   方式 A：打开仓库页面，点击 Code → Download ZIP，解压到自己选择的位置。
-   仓库地址：https://github.com/HangJiYun005/YunOS-public
+1. 在微信或其他软件里自行复制需要保存的文字。
+2. 进入“设置 → 资料导入 → 粘贴文字”。
+3. 粘贴正文，标题可以留空；留空时会使用正文第一行的简短片段。
+4. 来源可以选“微信”“网页”“手动记录”等。
+5. 检查预览后确认导入。
 
-   方式 B：电脑已安装 Git 时执行：
+程序不会后台监视剪贴板，不自动读取微信，也不会猜测消息的发言人和时间。
+如果这些信息对你重要，可以一起复制到正文中。
 
-   git clone https://github.com/HangJiYun005/YunOS-public.git
-   cd YunOS-public
+四、重复导入如何处理
 
-3. 如果使用 ZIP 下载，请在解压后的项目文件夹中打开 PowerShell。
-   输入 dir 后，应能看到 README.md、run.ps1、tools、web 等文件和目录。
-   后文的“项目根目录”就是这个位置。
+- 按正文内容检查，不是只比较文件名。
+- 相同文字、不同文件名：不再增加正文，保留来源信息。
+- 同名文件、不同文字：分别保存，不覆盖已有资料。
+- Windows/Unix 换行和常见 Unicode 表示差异会做统一处理。
+- 其他文字、空格或内容发生变化时，可能被视为不同资料。
+- 同一批内重复、以后再次导入、重复点保存，都会检查重复。
+- 预览不写入数据库；修改输入后需要重新预览。
+- 预览有效期为 10 分钟，过期后重新检查即可。
+- 空文件或格式错误会单独列出；其他有效文件仍可确认导入。
 
-三、安装基础运行环境
+五、搜索和阅读
 
-在项目根目录依次执行：
+回到主页面，在搜索框输入关键词。默认搜索全部资料，没有私人记忆分区。
+支持中文原文中的短词，也支持标题搜索。Ctrl+K 可以快速聚焦搜索框。
+点击结果卡片阅读原文；右上角关闭阅读窗口可以返回列表。
 
-   py -3.13 -m venv .venv
-   .\.venv\Scripts\python.exe -m pip install tzdata==2026.2
+目前是本地关键词/子串搜索，不是 AI 语义搜索，不能保证理解改写后的意思。
+搜索不到时，试试原文里实际出现过的词。
 
-这里创建的是项目专用 Python 环境，不需要执行 activate，也不需要修改
-PowerShell 的全局执行策略。下载依赖时需要联网。
+六、数据保存在哪里
 
-只做聊天导入和关键词搜索，先完成这两步即可。
-requirements.txt 还包含 sentence-transformers，供可选的本地语义检索使用。
-需要该功能时再执行下面的命令，并继续阅读 docs/local_embedding.md：
+默认数据目录：
+   %LOCALAPPDATA%\YunOS\data
 
-   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+在文件资源管理器地址栏粘贴上面的路径即可打开。
+主要文件是 library.sqlite，其他 service 文件用于本机服务协调。
+不要在服务运行时移动或替换数据库。
 
-安装这个依赖并不会自动下载模型、创建索引或开启所有 AI 功能。
+自动下载的程序和运行环境也位于 %LOCALAPPDATA%\YunOS 下，但与 data 分开。
+重新下载启动包不会覆盖资料。删除整个 YunOS 目录则会丢失资料，操作前应备份。
+更换电脑不会自动带走旧电脑的资料。
 
-四、导入自己的聊天记录
+七、备份、恢复和退出
 
-1. 准备从 ChatGPT 导出的原始 ZIP 文件，不需要先解压。
-   这不是网页截图，也不是手工复制的 TXT；包内需要有 conversations.json
-   或 conversations-000.json 等工具支持的对话数据文件。
+备份：设置 → 本地数据 → 下载完整备份。
+备份使用 SQLite 的备份机制，包含已经成功保存的正文和来源。
+备份是私人资料，请放在可信位置。
 
-2. 创建存放导出包的文件夹：
+恢复：
+1. 在“设置 → 本地数据”中退出本机服务。
+2. 确认服务已经结束，并关闭窗口。
+3. 把 data 目录整体复制一份作为回退备份。
+4. 确认 data 目录内没有 library.sqlite-wal 和 library.sqlite-shm 文件。
+   若它们仍存在，不要直接替换或删除，先排查服务是否完全退出。
+5. 将备份的 .sqlite 文件复制到 data 目录，并命名为 library.sqlite，
+   在已备份原文件的前提下进行替换。
+6. 再双击 BAT，检查资料数量和原文。
 
-   New-Item -ItemType Directory -Force .\imports\chatgpt | Out-Null
-
-3. 把导出包复制到该目录，并命名为 export.zip。
-   最终位置应为：项目根目录\imports\chatgpt\export.zip。
-   这一步需要你自己复制文件，创建目录的命令不会自动下载聊天记录。
-
-4. 执行导入：
-
-   .\.venv\Scripts\python.exe .\tools\chatgpt_export_importer.py .\imports\chatgpt\export.zip --out .\data\first_import
-
-   成功后，终端会显示“导入完成”及输出文件位置。
-   其中 data\first_import\chatgpt_memory.sqlite 是用于搜索的数据库。
-   同目录还会有索引、消息文件和导入报告，这些也属于你的私人数据。
-
-重要：重复使用同一个 --out 目录，会重新生成其中的数据库及其他输出文件。
-下次导入请换一个新目录，例如 data\second_import，并在启动时改用新数据库。
-不要把个人导出包、数据库、导入报告或密钥上传到 GitHub。
-
-五、启动并使用浏览器版
-
-在项目根目录执行：
-
-   .\.venv\Scripts\python.exe .\tools\local_web.py --db .\data\first_import\chatgpt_memory.sqlite --real --readonly --port 8765
-
-看到服务启动信息后，保持这个 PowerShell 窗口打开，在浏览器地址栏输入：
-
-   http://127.0.0.1:8765
-
-日常使用方式：
-
-1. 展开左侧栏，点击“记忆”，把记忆范围切换为“通用记忆”。
-   再输入记录里出现过的关键词，例如某个项目名或当时讨论的主题。
-   首页搜索默认只查“鲸鱼记忆”，新导入的通用记录可能不会出现在其中。
-2. 打开命中的结果，阅读前后消息和原始对话。
-3. 如果没有结果，换成更短、更确定的词，并检查筛选条件。
-4. 当前命令是只读模式，不能保存标签、标记或执行写入操作。
-5. AI、目标、计划等入口如提示没有配置，不影响先使用基础搜索和阅读。
-
-停止服务：回到启动服务的 PowerShell 窗口，按 Ctrl+C。
-关闭网页不会停止后台服务；下次使用时，重新执行上面的启动命令即可。
-导入只需在添加或更新数据时进行，不必每次启动都重新导入。
-
-127.0.0.1 只代表当前电脑，手机不能用这个地址访问你电脑上的服务。
-本教程不启用远程访问或自动同步。
-
-六、可选：生成用于开发的测试数据库
-
-run.ps1 create-test-db 并不是从零创建演示资料的命令：它需要一个已有源库。
-完成前面的导入后，可以显式指定源库，生成合成测试记录：
-
-   .\.venv\Scripts\python.exe .\tools\create_test_db.py --source-db .\data\first_import\chatgpt_memory.sqlite --out-db .\data\test\ayunos_memory_test.db
-
-再用只读模式打开测试库：
-
-   .\.venv\Scripts\python.exe .\tools\local_web.py --db .\data\test\ayunos_memory_test.db --readonly --port 8765
-
-测试库不是原始聊天记录的备份。源库会以只读方式打开；目标库已存在时，
-命令默认拒绝覆盖。日常阅读自己的记录仍使用第五部分的命令。
-
-七、可选：桌面版的构建和安装
-
-桌面版使用 Electron，在独立窗口中显示本地工作区。
-目前的启动器面向已部署完整主机的环境，不能只凭第四部分的单个导入库启动。
-如果你只是想搜索聊天记录，用浏览器版即可，不需要完成这一部分。
-
-构建前需要：
-
-- 已配置好项目内的 .venv。
-- Node.js 22.12.0 或满足锁文件依赖要求的更高版本，以及 npm。
-- 本机已有完整且兼容的五个数据库：
-  data\ayunos_chatgpt.db
-  data\profile\approved_profile.db
-  data\semantic\ayunos_semantic.db
-  data\runtime\ayunos_runtime.db
-  data\operational\ayunos_operational_state.db
-- config_private\primary_host.json 中的主机配置与当前电脑一致。
-
-这些配套数据库涉及独立的初始化、迁移与授权流程，公开仓库不提供私人
-数据库或生产授权记录。不要创建空文件冒充数据库，也不要把一个导入库
-复制五份。未具备条件时，继续使用第五部分的浏览器版。
-
-已有完整数据库的部署者，可以在项目根目录用下面的命令生成本机配置。
-它会写入配置文件；若该文件已经存在，请保留原配置并先核对内容：
-
-   New-Item -ItemType Directory -Force .\config_private | Out-Null
-   $hostConfigPath = Join-Path (Get-Location).Path 'config_private\primary_host.json'
-   if (Test-Path -LiteralPath $hostConfigPath) { throw '配置已存在，请先核对，不要直接覆盖。' }
-   $hostConfig = [ordered]@{
-       schema_version = 1
-       role = 'primary'
-       host_name = $env:COMPUTERNAME
-       project_root = (Get-Location).Path
-       web_host = '127.0.0.1'
-       web_port = 18790
-       service_mode = 'real-readonly'
-       database_sync_enabled = $false
-       provider_enabled = $false
-   }
-   $hostConfigJson = $hostConfig | ConvertTo-Json
-   [IO.File]::WriteAllText($hostConfigPath, $hostConfigJson, [Text.UTF8Encoding]::new($false))
-
-确认前提齐备后，在项目根目录执行：
-
-   cd desktop
-   npm ci
-   npm test
-   npm run package
-   cd ..
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\desktop\install.ps1
-
-打包需要联网下载 Electron，并核对其校验值。
-安装脚本把应用放到当前用户的 %LOCALAPPDATA%\Programs\YunOS，
-同时创建桌面和开始菜单快捷方式。更新前应先关闭正在运行的 YunOS。
-
-安装后可尝试从桌面或开始菜单打开 YunOS。安装包会记录构建时的源码目录，
-因此不要随意移动该目录；更换位置后，需要更新本机配置并重新打包、安装。
-修改 desktop 下的源码后，也需要重新打包和安装，已安装的应用才会更新。
-桌面窗口关闭后，后台主机服务可能仍在运行；要明确停止它，可在项目根目录执行：
-
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop_yunos_private_access.ps1 -Port 18790
+日常退出：设置 → 本地数据 → 退出本机服务。
+只关闭窗口不会结束服务；再次双击 BAT 会复用已有服务。
 
 八、常见问题
 
-1. 提示找不到 Python 或 .venv\Scripts\python.exe
-   先确认终端位于项目根目录，再检查第二、三部分是否完成。
+1. 第一次一直停在下载
+   检查能否访问 GitHub 和 python.org。下载失败后重新双击即可重试。
+   不需要自行下载第三方 Python 安装包，也不需要管理员运行。
 
-2. 提示数据库不存在
-   先完成导入，再核对 --db 指向的文件是否真的存在。
-   公开仓库不包含数据库；仅下载源码还不能直接阅读聊天记录。
+2. 出现乱码
+   在预览页面把编码改为 UTF-8、GB18030/GBK 或带 BOM 的 UTF-16，重新检查。
+   自动识别只是尝试，最终以你看到的预览内容为准。
 
-3. 提示端口被占用
-   将启动命令最后的 --port 8765 改成 --port 8766，
-   浏览器地址也相应改成 http://127.0.0.1:8766。
+3. 提示预览过期或会话失效
+   重新检查；服务重启后刷新页面，再继续导入。
 
-4. 搜索不到内容
-   检查导入报告中的对话和消息数量，确认当前打开的是正确的数据库。
-   在左侧栏“记忆”中选择“通用记忆”，再尝试搜索原文中的短词。
-   导入时不要使用 --no-full-text，
-   因为该选项会省略消息正文，不适合用来体验全文搜索。
+4. 文件不支持或太大
+   先转换为 TXT/Markdown，或拆分成较小文件后导入。
 
-5. 桌面版提示主机配置不匹配
-   核对 primary_host.json 中的电脑名、项目绝对路径和端口，
-   并确认五个数据库齐备。首次使用者可以先回到浏览器版。
+5. 下载校验失败
+   不会继续使用未通过校验的文件。检查网络后重试，或重新下载启动包。
 
-6. 页面能打开，但 AI 功能无法使用
-   本地网页启动不等于 AI 服务已启用。外部 AI 需要额外的 Provider、
-   本机凭据和相关授权配置，可能向服务商发送选定上下文并产生费用。
-   仅阅读和关键词搜索不需要这些配置。
+6. 程序没有打开
+   查看 BAT 窗口中的错误。启动日志位于 %LOCALAPPDATA%\YunOS\logs。
+   已保存数据仍在 data 目录，不要为了修复启动而删除整个目录。
 
-7. 如何备份和更新
-   先停止服务，再把自己的 data、imports 和 config_private 等本地资料
-   复制到单独的备份位置。用 Git 下载的源码可在核对本地修改后执行 git pull；
-   ZIP 用户可解压到新目录，避免直接覆盖旧数据。
-   涉及数据库版本变化时，应按对应技术文档完成迁移。
+7. 为什么关闭动画变少了
+   如果系统启用了“减少动态效果”，程序会相应减弱过渡动画。
 
-九、更多说明
-
-README.md：项目介绍和快速上手。
-SANITIZATION.md：本次公开源码的脱敏范围。
-docs/architecture.md：系统架构。
-docs/chatgpt_importer_public.md：导入工具说明。
-docs/local_embedding.md：可选本地语义检索说明。
-
-本教程的基础流程针对 Windows 和当前源码。历史部署文档中的私人验收
-记录已被移除，不能据此判断新电脑已完成完整主机部署。
+8. 旧版数据库怎么办
+   本版使用新的独立资料库，不自动改动旧版五库。
+   旧库直接迁移尚未实现；不要把旧数据库直接重命名成 library.sqlite。

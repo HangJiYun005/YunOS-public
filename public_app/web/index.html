@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>YunOS · 你的文字资料库</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="YunOS 首页"><span class="brand-mark">Y</span>YunOS<span class="brand-dot"></span></a>
+    <div class="nav-caption">我的空间</div>
+    <button id="library-nav" class="nav-item active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6l2 2h8v12H4z"/></svg>全部资料<span id="nav-count">0</span></button>
+    <div class="sidebar-foot"><span class="local-status"><i></i>保存在这台电脑</span><button id="settings-button" class="nav-item" aria-label="设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg>设置<svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
+  </aside>
+  <main>
+    <header class="topbar"><span>资料库 <span class="slash">/</span> <span class="muted">全部资料</span></span><span class="edition">LOCAL LIBRARY</span></header>
+    <section class="workspace">
+      <div class="intro"><p class="eyebrow">留下值得再读的文字</p><h1>让信息有处可寻。</h1><p class="intro-copy">一段消息、一篇摘录，或一个刚刚冒出的想法。</p></div>
+      <form id="search-form" class="search-box" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" aria-label="搜索全部资料" placeholder="搜索你保存的文字…" maxlength="500" autocomplete="off"><button type="button" id="clear-search" aria-label="清除搜索" hidden>×</button><kbd>Ctrl K</kbd></form>
+      <div class="list-heading"><h2 id="list-title">最近保存</h2><span id="result-count" class="muted" aria-live="polite">正在读取…</span></div>
+      <div id="items" class="items"></div>
+      <section id="empty" class="empty" hidden><div class="empty-art" aria-hidden="true"><span></span><span></span><span></span></div><h2 id="empty-title">从第一份资料开始</h2><p id="empty-copy">在「设置 → 资料导入」中，粘贴文字或拖入文件。</p><button id="first-import" class="primary">导入第一份资料 <span aria-hidden="true">↗</span></button></section>
+      <button id="load-more" class="secondary load-more" hidden>加载更多</button>
+      <p id="main-error" class="error" role="alert" hidden></p>
+    </section>
+    <footer>文字留在本地，思路自在延伸。</footer>
+  </main>
+  <dialog id="settings" class="settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-head"><div class="breadcrumb"><button id="settings-back" class="icon-button" aria-label="返回设置" hidden>←</button><h2 id="settings-title">设置</h2><span id="settings-subtitle"></span></div><button id="settings-close" class="icon-button" aria-label="关闭设置">×</button></div>
+    <div id="settings-home" class="settings-page">
+      <p class="section-intro">让资料整理，保持简单。</p>
+      <button class="setting-row" id="import-menu"><span class="setting-symbol">↧</span><span><strong>资料导入</strong><small>选择文件、拖拽，或直接粘贴文字</small></span><span class="row-arrow">→</span></button>
+      <button class="setting-row" id="data-menu"><span class="setting-symbol">▤</span><span><strong>本地数据</strong><small>查看保存位置，导出一份完整备份</small></span><span class="row-arrow">→</span></button>
+      <div class="settings-note"><span class="brand-mark small">Y</span><div>YunOS <span id="version"></span><small>属于你的本地文字资料库</small></div></div>
+    </div>
+    <div id="settings-import" class="settings-page" hidden>
+      <div class="tabs" role="tablist" aria-label="导入方式"><button id="file-tab" role="tab" aria-selected="true" aria-controls="file-panel" class="selected">导入文件</button><button id="text-tab" role="tab" aria-selected="false" aria-controls="text-panel">粘贴文字</button></div>
+      <div id="file-panel" role="tabpanel" aria-labelledby="file-tab"><input type="file" id="file-input" multiple accept=".txt,.md,.markdown" hidden><button id="dropzone" class="dropzone"><span class="upload-symbol" aria-hidden="true">↥</span><strong>把文字文件拖到这里</strong><span>或点击选择文件</span><small>TXT、Markdown · 单个 5 MB · 每批 10 MB / 50 个</small></button><div id="file-selection" class="selection" aria-live="polite">尚未选择文件</div></div>
+      <div id="text-panel" role="tabpanel" aria-labelledby="text-tab" hidden><label for="note-title">标题 <span class="muted">选填，留空时使用第一行</span></label><input id="note-title" class="field" maxlength="200" placeholder="给这段文字起个名字"><label for="note-body">正文</label><textarea id="note-body" rows="6" placeholder="粘贴微信消息、文章摘录，或写下一个想法…"></textarea></div>
+      <div class="form-row"><label>来源<select id="source"><option>文件</option><option>微信</option><option>网页</option><option>手动记录</option><option>其他</option></select></label><label id="encoding-field">文字编码<select id="encoding"><option value="auto">自动识别</option><option value="utf-8">UTF-8</option><option value="gb18030">GB18030 / GBK</option><option value="utf-16">UTF-16（含 BOM）</option></select></label></div>
+      <p class="helper">先检查，再保存。相同正文不会重复添加；同名文件不会覆盖旧资料。</p>
+      <p id="import-error" class="error" role="alert" hidden></p>
+      <div id="preview" hidden><div class="preview-heading"><strong>导入预览</strong><span id="preview-summary" aria-live="polite"></span></div><div id="preview-rows" class="preview-rows"></div></div>
+      <div id="import-result" class="import-result" role="status" hidden></div>
+      <div class="actions"><button id="reset-import" class="secondary">清空</button><button id="check-import" class="secondary">检查并预览</button><button id="save-import" class="primary" disabled>确认导入</button></div>
+    </div>
+    <div id="settings-data" class="settings-page" hidden><h3>资料留在你的电脑上</h3><p class="section-intro">程序文件与资料分开保存。重新下载程序不会清空资料。</p><label>数据位置</label><code id="data-path" class="data-path"></code><p class="helper">备份包含全部正文和来源信息，请保存到你信任的位置。更换电脑不会自动同步。</p><a id="backup" class="secondary button-link" href="/api/backup" download>下载完整备份</a><p class="helper">恢复备份：先退出服务，再用备份文件替换上方目录中的 library.sqlite。替换前保留原文件副本。</p><hr><button id="shutdown" class="secondary">退出本机服务</button><p class="helper">仅关闭浏览器不会结束服务；下次双击 BAT 即可再次打开。</p></div>
+  </dialog>
+  <dialog id="reader" class="reader-dialog" aria-labelledby="reader-title"><div class="dialog-head"><span class="muted">阅读资料</span><button id="reader-close" class="icon-button" aria-label="关闭阅读">×</button></div><article><h2 id="reader-title"></h2><p id="reader-meta" class="muted"></p><pre id="reader-body"></pre></article></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body></html>
