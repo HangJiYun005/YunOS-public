@@ -10,7 +10,7 @@ This snapshot includes current source code, tests, web assets and the Electron d
 - Security tests retain clearly synthetic credential sentinels and example addresses to test rejection/redaction behavior.
 - Desktop launch requires a locally created config_private/primary_host.json matching the machine and project path, and the required local databases. Those resources are not distributed.
 
-This branch does not remove or audit any pre-existing GitHub branches or their history. Repository visibility remains private.
+This public repository contains only the sanitized snapshot and its subsequent updates. The original private repository and its pre-existing branches/history are separate and have not been published or audited by this snapshot.
 
 ## Validation
 
