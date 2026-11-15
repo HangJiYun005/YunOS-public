@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 import webbrowser
 
-VERSION = '0.2.1'
+VERSION = '0.2.2'
 MAX_FILE = 5 * 1024 * 1024
 MAX_BATCH = 10 * 1024 * 1024
 MAX_REQUEST = 16 * 1024 * 1024

@@ -8,11 +8,11 @@
 
 ## 双击就开始
 
-**[下载 Start-YunOS.bat](https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.1/Start-YunOS.bat)**，保存后双击。
+**[下载 Start-YunOS.bat](https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.2/Start-YunOS.bat)**，保存后双击。
 
-首次启动会自动下载程序和独立运行环境，完成后打开 YunOS。无需自行安装 Python、Node.js 或 Git，不需要管理员权限。之后仍然双击这个 BAT；本机环境已准备好时，使用资料库不需要联网。
+首次启动会自动下载程序和独立运行环境（网络中断时自动重试，最多 3 次），完成后打开 YunOS。无需自行安装 Python、Node.js 或 Git，不需要管理员权限。之后仍然双击这个 BAT；本机环境已准备好时，使用资料库不需要联网。
 
-也可以下载 [完整启动包 ZIP](https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.1/YunOS-0.2.1.zip)，解压后双击其中的 BAT。首次仍需下载运行环境。
+也可以下载 [完整启动包 ZIP](https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.2/YunOS-0.2.2.zip)，解压后双击其中的 BAT。首次仍需下载运行环境。
 
 适用范围是 **Windows 10 / 11**，首次下载需能连接 GitHub 和 python.org。BAT 不是 macOS 或 Linux 的启动方式。目前已在 Windows x64 上实测；x86 / ARM64 下载分支尚未在对应实机验收。
 

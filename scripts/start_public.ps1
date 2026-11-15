@@ -5,6 +5,19 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
+function Get-VerifiedDownload {
+    param([string]$Uri, [string]$Destination)
+    for ($DownloadAttempt = 1; $DownloadAttempt -le 3; $DownloadAttempt++) {
+        try {
+            Invoke-WebRequest -UseBasicParsing -Uri $Uri -OutFile $Destination -TimeoutSec 180
+            return
+        } catch {
+            if ($DownloadAttempt -eq 3) { throw }
+            Write-Host ('Download interrupted. Retrying (' + $DownloadAttempt + '/3)...')
+            Start-Sleep -Seconds (2 * $DownloadAttempt)
+        }
+    }
+}
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $RuntimeVersion = '3.14.10'
 # SHA-256 values published at https://www.python.org/downloads/release/python-31410/
@@ -31,7 +44,7 @@ try {
         $DownloadPath = Join-Path $InstallRoot ('python-' + [guid]::NewGuid().ToString('N') + '.zip')
         $StageDir = Join-Path $InstallRoot ('runtime-stage-' + [guid]::NewGuid().ToString('N'))
         $RuntimeUrl = "https://www.python.org/ftp/python/$RuntimeVersion/python-$RuntimeVersion-embed-$RuntimeArch.zip"
-        Invoke-WebRequest -UseBasicParsing -Uri $RuntimeUrl -OutFile $DownloadPath -TimeoutSec 180
+        Get-VerifiedDownload -Uri $RuntimeUrl -Destination $DownloadPath
         $HashStream = [IO.File]::OpenRead($DownloadPath)
         $Hasher = [Security.Cryptography.SHA256]::Create()
         try { $ActualHash = [BitConverter]::ToString($Hasher.ComputeHash($HashStream)).Replace('-', '').ToLowerInvariant() }

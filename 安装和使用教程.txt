@@ -1,10 +1,10 @@
-﻿YunOS 安装和使用教程（公开版 0.2.1）
+﻿YunOS 安装和使用教程（公开版 0.2.2）
 ===================================
 
 一、第一次打开
 
 1. 下载 Start-YunOS.bat：
-   https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.1/Start-YunOS.bat
+   https://github.com/HangJiYun005/YunOS-public/releases/download/v0.2.2/Start-YunOS.bat
 2. 把它保存到桌面或自己容易找到的位置，再双击。
 3. 第一次需要联网。程序会下载自身文件和独立 Python 运行环境，
    校验后自动启动。你不需要手工安装 Python、Node.js、Git 或数据库。

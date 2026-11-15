@@ -13,9 +13,9 @@ FILES = (
 
 
 def main():
-    output = ROOT / 'output/public-release-0.2.1'
+    output = ROOT / 'output/public-release-0.2.2'
     output.mkdir(parents=True, exist_ok=True)
-    archive = output / 'YunOS-0.2.1.zip'
+    archive = output / 'YunOS-0.2.2.zip'
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as bundle:
         for name in FILES:
             path = ROOT / name
@@ -24,7 +24,7 @@ def main():
             bundle.write(path, name)
     shutil.copyfile(ROOT / 'Start-YunOS.bat', output / 'Start-YunOS.bat')
     lines = [hashlib.sha256((output / name).read_bytes()).hexdigest() + '  ' + name
-             for name in ('YunOS-0.2.1.zip', 'Start-YunOS.bat')]
+             for name in ('YunOS-0.2.2.zip', 'Start-YunOS.bat')]
     (output / 'SHA256SUMS.txt').write_text('\n'.join(lines) + '\n', encoding='ascii')
     with zipfile.ZipFile(archive) as bundle:
         assert set(bundle.namelist()) == set(FILES)
