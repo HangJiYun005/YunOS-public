@@ -32,10 +32,15 @@ try {
         $StageDir = Join-Path $InstallRoot ('runtime-stage-' + [guid]::NewGuid().ToString('N'))
         $RuntimeUrl = "https://www.python.org/ftp/python/$RuntimeVersion/python-$RuntimeVersion-embed-$RuntimeArch.zip"
         Invoke-WebRequest -UseBasicParsing -Uri $RuntimeUrl -OutFile $DownloadPath -TimeoutSec 180
-        if ((Get-FileHash -LiteralPath $DownloadPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $RuntimeHashes[$RuntimeArch]) {
+        $HashStream = [IO.File]::OpenRead($DownloadPath)
+        $Hasher = [Security.Cryptography.SHA256]::Create()
+        try { $ActualHash = [BitConverter]::ToString($Hasher.ComputeHash($HashStream)).Replace('-', '').ToLowerInvariant() }
+        finally { $HashStream.Dispose(); $Hasher.Dispose() }
+        if ($ActualHash -ne $RuntimeHashes[$RuntimeArch]) {
             throw 'Runtime checksum mismatch. Nothing was installed. Please retry.'
         }
-        Expand-Archive -LiteralPath $DownloadPath -DestinationPath $StageDir
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        [IO.Compression.ZipFile]::ExtractToDirectory($DownloadPath, $StageDir)
         & (Join-Path $StageDir 'python.exe') -I -c 'import sqlite3, json, http.server, hashlib; print(sqlite3.sqlite_version)'
         if ($LASTEXITCODE -ne 0) { throw 'Runtime cannot start on this computer.' }
         if (Test-Path -LiteralPath $RuntimeDir) {
