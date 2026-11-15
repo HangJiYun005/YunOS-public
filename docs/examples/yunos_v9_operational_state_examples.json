@@ -1,0 +1,62 @@
+{
+  "schema_version": "yunos-operational-state-examples-1",
+  "privacy_notice": "Synthetic metadata only. No private message content is included.",
+  "state_event": {
+    "event_id": "event:sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "entity_id": "project:yunos",
+    "entity_type": "project",
+    "event_type": "project_declared",
+    "source_kind": "declared",
+    "source_anchor": {
+      "anchor_id": "anchor:user:v9-authority",
+      "source_kind": "user_declaration",
+      "locator": "task-authority:v9",
+      "evidence_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+      "observed_at": "2026-07-31T00:00:00Z",
+      "privacy_scope": "private_metadata"
+    },
+    "authority_kind": "user",
+    "actor_kind": "user",
+    "actor_id": "actor:local-user",
+    "observed_at": "2026-07-31T00:00:00Z",
+    "effective_at": "2026-07-31T00:00:00Z",
+    "recorded_at": "2026-07-31T00:00:01Z",
+    "expires_at": null,
+    "supersedes_event_id": null,
+    "caused_by_event_id": null,
+    "idempotency_key": "idempotency:v9-seed-yunos",
+    "conflict_group_id": null,
+    "canonical_payload": {
+      "name": "YunOS",
+      "purpose": "Private evidence-backed memory, runtime and operational state system",
+      "status": "active",
+      "current_phase": "v9",
+      "prohibited_actions": ["push", "v9-g", "v9.1", "v10", "stash-mutation"]
+    },
+    "payload_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "privacy_scope": "private_metadata",
+    "projection_version": 1,
+    "schema_version": 9001
+  },
+  "delegation_contract": {
+    "delegation_id": "delegation:v9-acceptance-readonly",
+    "user_intent": "Run one bounded local read-only acceptance check",
+    "target_project_id": "project:yunos",
+    "task": "Generate a counts-only design audit result in a temporary directory",
+    "readable_resources": ["repo:metadata", "git:refs", "database:aggregates"],
+    "writable_resources": ["temporary:v9-acceptance"],
+    "prohibited_operations": ["production-db-write", "push", "merge", "tag", "create-next-node"],
+    "risk_level": "low",
+    "valid_from": "2026-07-31T00:00:00Z",
+    "expires_at": "2026-08-01T00:00:00Z",
+    "allowed_tools": ["local-readonly-check"],
+    "acceptance_criteria": ["artifact digest verified", "no production content changed"],
+    "rollback_conditions": ["remove temporary artifact"],
+    "commit_permission": false,
+    "merge_permission": false,
+    "tag_permission": false,
+    "push_permission": false,
+    "next_node_permission": false,
+    "authority_digest": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

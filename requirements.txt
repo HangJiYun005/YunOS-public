@@ -1,0 +1,4 @@
+# Optional local-only embedding provider for YunOS v4-E.
+sentence-transformers==5.6.0
+# Required by Python zoneinfo on Windows for the sealed Asia/Shanghai protocol.
+tzdata==2026.2

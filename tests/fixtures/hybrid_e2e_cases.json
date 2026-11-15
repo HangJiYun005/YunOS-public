@@ -1,0 +1,10 @@
+{
+  "cases": [
+    {"id": "natural-whale", "query": "我们 之前 聊过 鲸鱼 和 记忆 吗", "query_type": "natural", "topic": "whale", "expected_source_ids": ["k-whale", "s-whale"]},
+    {"id": "natural-yunos", "query": "我们 之前 讨论过 YunOS 和 摘要 保存 吗", "query_type": "natural", "topic": "YunOS", "expected_source_ids": ["k-yunos", "s-yunos"]},
+    {"id": "natural-stm32", "query": "我们 之前 讨论过 STM32 和 温度 传感器 吗", "query_type": "natural", "topic": "STM32", "expected_source_ids": ["k-stm32", "s-stm32"]},
+    {"id": "short-scifi", "query": "科幻 小说", "query_type": "short", "topic": "科幻", "expected_source_ids": ["k-scifi", "s-scifi"]},
+    {"id": "short-image", "query": "图像 生成", "query_type": "short", "topic": "图像生成", "expected_source_ids": ["k-image", "s-image"]},
+    {"id": "short-local", "query": "本地 模型", "query_type": "short", "topic": "本地模型", "expected_source_ids": ["k-local", "s-local"]}
+  ]
+}

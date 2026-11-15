@@ -1,0 +1,102 @@
+[
+  {
+    "id": "mock-001",
+    "title": "Local AI Notes",
+    "type": "project",
+    "updated_at": "2026-01-15T10:20:00Z",
+    "message_count": 18,
+    "tags": ["local-first", "notes", "prototype"],
+    "summary": "A fictional planning thread about organizing local AI tooling notes into a searchable workspace.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-002",
+    "title": "Writing Project Archive",
+    "type": "writing",
+    "updated_at": "2026-01-14T16:45:00Z",
+    "message_count": 42,
+    "tags": ["drafts", "archive", "creative"],
+    "summary": "A fictional archive item for tracking story drafts, revision notes, and reusable scene references.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-003",
+    "title": "Study Plan Review",
+    "type": "study",
+    "updated_at": "2026-01-13T08:30:00Z",
+    "message_count": 12,
+    "tags": ["study", "schedule", "review"],
+    "summary": "A mock study workflow showing how planned tasks, review checkpoints, and progress notes can be grouped.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-004",
+    "title": "Desktop App Debug Log",
+    "type": "tech",
+    "updated_at": "2026-01-12T21:10:00Z",
+    "message_count": 27,
+    "tags": ["debugging", "desktop", "python"],
+    "summary": "A fictional technical log for reproducing a desktop app issue and recording the final fix.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-005",
+    "title": "Reading Highlights",
+    "type": "review",
+    "updated_at": "2026-01-11T12:00:00Z",
+    "message_count": 9,
+    "tags": ["reading", "highlights", "notes"],
+    "summary": "A sample review card for collecting book highlights, useful quotes, and follow-up reading ideas.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-006",
+    "title": "Product Ideas",
+    "type": "project",
+    "updated_at": "2026-01-10T18:25:00Z",
+    "message_count": 31,
+    "tags": ["product", "ideas", "prioritization"],
+    "summary": "A mock backlog of product concepts, sorted by effort, clarity, and usefulness.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-007",
+    "title": "Weekly Reflection Template",
+    "type": "life",
+    "updated_at": "2026-01-09T09:15:00Z",
+    "message_count": 7,
+    "tags": ["reflection", "template", "weekly"],
+    "summary": "A fictional weekly reflection format for reviewing decisions, habits, and next actions without real records.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-008",
+    "title": "Code Review Checklist",
+    "type": "tech",
+    "updated_at": "2026-01-08T14:40:00Z",
+    "message_count": 15,
+    "tags": ["code", "quality", "checklist"],
+    "summary": "A reusable mock checklist for reviewing changes before committing source code.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-009",
+    "title": "Research Snapshot",
+    "type": "review",
+    "updated_at": "2026-01-07T17:05:00Z",
+    "message_count": 20,
+    "tags": ["research", "summary", "references"],
+    "summary": "A fictional research snapshot showing how sources, takeaways, and open questions might be stored.",
+    "privacy_level": "mock"
+  },
+  {
+    "id": "mock-010",
+    "title": "Roadmap Decision Log",
+    "type": "project",
+    "updated_at": "2026-01-06T11:55:00Z",
+    "message_count": 24,
+    "tags": ["roadmap", "decision-log", "mvp"],
+    "summary": "A mock decision log for product roadmap choices, tradeoffs, and later review.",
+    "privacy_level": "mock"
+  }
+]

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Temporary YunOS icon</title>
+  <desc id="desc">Replaceable monochrome Y mark for PWA foundation testing.</desc>
+  <rect width="512" height="512" rx="112" fill="#f7f8fa"/>
+  <path fill="#355f86" d="M116 112h72l68 106 68-106h72L288 278v122h-64V278z"/>
+</svg>

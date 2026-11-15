@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8fa" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title data-i18n="app.documentTitle">YunOS — 简体中文界面</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/yunos-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/yunos-apple-touch-180.png" />
+    <link rel="stylesheet" href="/style.css?v=10-e-1" />
+  </head>
+  <body data-yunos-offline-shell="true">
+    <div
+      id="pwa-host-status"
+      class="pwa-host-status"
+      role="status"
+      aria-live="polite"
+      data-i18n="error.hostUnavailable"
+    >
+      无法连接 YunOS 主机。实时内容不可用；完整应用壳可用时可继续阅读有效缓存副本。
+    </div>
+    <div id="yunos-desktop-shell" class="yunos-desktop-shell shell" data-page-state="home">
+      <header class="yunos-shell-header">
+        <div class="yunos-shell-brand-slot">
+          <span class="yunos-shell-logo-word">YunOS</span>
+        </div>
+      </header>
+      <main
+        class="yunos-shell-stage"
+        aria-label="YunOS 离线应用壳"
+        data-i18n-attr="aria-label:aria.offlineShell"
+      ></main>
+    </div>
+    <script src="/i18n/en.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/en-shell-mobile-extra.js?v=10-e-2"></script>
+    <script src="/i18n/zh-CN-shell-mobile-extra.js?v=10-e-2"></script>
+    <script src="/i18n/en-legacy-core.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN-legacy-core.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/en-legacy-tools.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN-legacy-tools.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/en-operational-extra.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN-operational-extra.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/index.js?v=9-0-1-i18n-3"></script>
+  </body>
+</html>

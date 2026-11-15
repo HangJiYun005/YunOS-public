@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Example Project",
+    "description": "Synthetic configuration example; replace locally.",
+    "status": "active",
+    "priority": 1,
+    "keywords": [
+      "example"
+    ],
+    "aliases": []
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.yunos.invalid/schemas/v9/operational-state.schema.json",
+  "title": "YunOS v9 Operational State Contracts",
+  "type": "object",
+  "required": ["schema_version", "document_type", "document"],
+  "properties": {
+    "schema_version": {"const": "yunos-operational-state-contract-1"},
+    "document_type": {
+      "enum": ["state_event", "authority_artifact", "now_package", "project_resume_package", "delegation_contract"]
+    },
+    "document": {
+      "oneOf": [
+        {"$ref": "#/$defs/state_event"},
+        {"$ref": "#/$defs/authority_artifact"},
+        {"$ref": "#/$defs/now_package"},
+        {"$ref": "#/$defs/project_resume_package"},
+        {"$ref": "#/$defs/delegation_contract"}
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identity": {"type": "string", "pattern": "^[a-z][a-z0-9_.:-]{2,191}$"},
+    "timestamp": {"type": ["string", "null"], "format": "date-time"},
+    "source_anchor": {
+      "type": "object",
+      "required": ["anchor_id", "source_kind", "locator", "evidence_digest", "observed_at", "privacy_scope"],
+      "properties": {
+        "anchor_id": {"$ref": "#/$defs/identity"},
+        "source_kind": {"enum": ["user_declaration", "git", "database", "file", "service", "runtime", "approved_memory", "test"]},
+        "locator": {"type": "string", "minLength": 1, "maxLength": 512},
+        "evidence_digest": {"$ref": "#/$defs/sha256"},
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "privacy_scope": {"enum": ["public", "private_metadata", "private_content", "secret_reference"]}
+      },
+      "additionalProperties": false
+    },
+    "state_event": {
+      "type": "object",
+      "required": [
+        "event_id", "entity_id", "entity_type", "event_type", "source_kind", "source_anchor",
+        "authority_kind", "actor_kind", "actor_id", "observed_at", "effective_at", "recorded_at",
+        "expires_at", "supersedes_event_id", "caused_by_event_id", "idempotency_key",
+        "conflict_group_id", "canonical_payload", "payload_digest", "privacy_scope",
+        "projection_version", "schema_version"
+      ],
+      "properties": {
+        "event_id": {"$ref": "#/$defs/identity"},
+        "entity_id": {"$ref": "#/$defs/identity"},
+        "entity_type": {"enum": ["project", "goal", "work_item", "decision", "commitment", "blocker", "resource", "delegation", "outcome"]},
+        "event_type": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,63}$"},
+        "source_kind": {"enum": ["declared", "observed", "inferred_candidate", "accepted_outcome"]},
+        "source_anchor": {"$ref": "#/$defs/source_anchor"},
+        "authority_kind": {"enum": ["user", "deterministic_observation", "verified_runtime", "accepted_outcome", "candidate_only", "system_reconciliation"]},
+        "actor_kind": {"enum": ["user", "agent", "system", "runtime", "test"]},
+        "actor_id": {"$ref": "#/$defs/identity"},
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "effective_at": {"$ref": "#/$defs/timestamp"},
+        "recorded_at": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "supersedes_event_id": {"type": ["string", "null"], "pattern": "^[a-z][a-z0-9_.:-]{2,191}$"},
+        "caused_by_event_id": {"type": ["string", "null"], "pattern": "^[a-z][a-z0-9_.:-]{2,191}$"},
+        "idempotency_key": {"$ref": "#/$defs/identity"},
+        "conflict_group_id": {"type": ["string", "null"], "pattern": "^[a-z][a-z0-9_.:-]{2,191}$"},
+        "canonical_payload": {"type": "object"},
+        "payload_digest": {"$ref": "#/$defs/sha256"},
+        "privacy_scope": {"enum": ["public", "private_metadata", "private_content", "secret_reference"]},
+        "projection_version": {"const": 1},
+        "schema_version": {"const": 9001}
+      },
+      "additionalProperties": false
+    },
+    "authority_artifact": {
+      "type": "object",
+      "required": [
+        "authority_id", "issued_by", "issued_at", "expires_at", "target_project_id",
+        "allowed_event_types", "read_scope", "write_scope", "prohibited_operations",
+        "commit_permission", "merge_permission", "tag_permission", "push_permission",
+        "next_node_permission", "authority_digest"
+      ],
+      "properties": {
+        "authority_id": {"$ref": "#/$defs/identity"},
+        "issued_by": {"$ref": "#/$defs/identity"},
+        "issued_at": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "target_project_id": {"$ref": "#/$defs/identity"},
+        "allowed_event_types": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "read_scope": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "write_scope": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "prohibited_operations": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "commit_permission": {"type": "boolean"},
+        "merge_permission": {"type": "boolean"},
+        "tag_permission": {"type": "boolean"},
+        "push_permission": {"type": "boolean"},
+        "next_node_permission": {"type": "boolean"},
+        "authority_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "required": ["max_items", "max_bytes", "selected_items", "canonical_bytes"],
+      "properties": {
+        "max_items": {"type": "integer", "minimum": 1},
+        "max_bytes": {"type": "integer", "minimum": 256},
+        "selected_items": {"type": "integer", "minimum": 0},
+        "canonical_bytes": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "now_package": {
+      "type": "object",
+      "required": ["as_of", "current_focus", "active_goals", "active_projects", "blockers", "waiting", "delegations", "pending_decisions", "recent_changes", "stale", "conflicted", "resources", "constraints", "source_anchors", "omitted_reasons", "budget", "package_digest"],
+      "properties": {
+        "as_of": {"$ref": "#/$defs/timestamp"},
+        "current_focus": {"type": ["object", "null"]},
+        "active_goals": {"type": "array"},
+        "active_projects": {"type": "array"},
+        "blockers": {"type": "array"},
+        "waiting": {"type": "array"},
+        "delegations": {"type": "array"},
+        "pending_decisions": {"type": "array"},
+        "recent_changes": {"type": "array"},
+        "stale": {"type": "array"},
+        "conflicted": {"type": "array"},
+        "resources": {"type": "array"},
+        "constraints": {"type": "array"},
+        "source_anchors": {"type": "array", "items": {"$ref": "#/$defs/source_anchor"}},
+        "omitted_reasons": {"type": "array"},
+        "budget": {"$ref": "#/$defs/budget"},
+        "package_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "project_resume_package": {
+      "type": "object",
+      "required": ["project_identity", "purpose", "authority_baseline", "current_phase", "completed_phases", "active_work", "approved_decisions", "pending_decisions", "blockers", "waiting", "delegations", "accepted_outcomes", "next_approved_step", "next_candidate_step", "deferred", "out_of_scope", "prohibited_actions", "source_anchors", "freshness", "omitted_reasons", "budget", "package_digest"],
+      "properties": {
+        "project_identity": {"$ref": "#/$defs/identity"},
+        "purpose": {"type": "string"},
+        "authority_baseline": {"type": "object"},
+        "current_phase": {"type": ["string", "null"]},
+        "completed_phases": {"type": "array"},
+        "active_work": {"type": "array"},
+        "approved_decisions": {"type": "array"},
+        "pending_decisions": {"type": "array"},
+        "blockers": {"type": "array"},
+        "waiting": {"type": "array"},
+        "delegations": {"type": "array"},
+        "accepted_outcomes": {"type": "array"},
+        "next_approved_step": {"type": ["object", "null"]},
+        "next_candidate_step": {"type": ["object", "null"]},
+        "deferred": {"type": "array"},
+        "out_of_scope": {"type": "array"},
+        "prohibited_actions": {"type": "array"},
+        "source_anchors": {"type": "array", "items": {"$ref": "#/$defs/source_anchor"}},
+        "freshness": {"type": "object"},
+        "omitted_reasons": {"type": "array"},
+        "budget": {"$ref": "#/$defs/budget"},
+        "package_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "delegation_contract": {
+      "type": "object",
+      "required": ["delegation_id", "user_intent", "target_project_id", "task", "readable_resources", "writable_resources", "prohibited_operations", "risk_level", "valid_from", "expires_at", "allowed_tools", "acceptance_criteria", "rollback_conditions", "commit_permission", "merge_permission", "tag_permission", "push_permission", "next_node_permission", "authority_digest"],
+      "properties": {
+        "delegation_id": {"$ref": "#/$defs/identity"},
+        "user_intent": {"type": "string", "minLength": 1},
+        "target_project_id": {"$ref": "#/$defs/identity"},
+        "task": {"type": "string", "minLength": 1},
+        "readable_resources": {"type": "array", "items": {"type": "string"}},
+        "writable_resources": {"type": "array", "items": {"type": "string"}},
+        "prohibited_operations": {"type": "array", "items": {"type": "string"}},
+        "risk_level": {"enum": ["low", "medium", "high"]},
+        "valid_from": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "allowed_tools": {"type": "array", "items": {"type": "string"}},
+        "acceptance_criteria": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "rollback_conditions": {"type": "array", "items": {"type": "string"}},
+        "commit_permission": {"type": "boolean"},
+        "merge_permission": {"type": "boolean"},
+        "tag_permission": {"type": "boolean"},
+        "push_permission": {"type": "boolean"},
+        "next_node_permission": {"type": "boolean"},
+        "authority_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

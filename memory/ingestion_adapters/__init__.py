@@ -1,0 +1,41 @@
+"""Read-only source adapters for YunOS v8.3 ingestion planning."""
+
+from .chatgpt import (
+    ACTIVE_PATH_COMPAT,
+    ALL_REACHABLE_AUDIT,
+    AdapterLimits,
+    AttachmentOccurrence,
+    ChatGPTAdapter,
+    ChatGPTAdapterError,
+    ChatGPTPlanningResult,
+    NormalizedBundle,
+    SourceAuditSummary,
+    SourceProbe,
+    TargetSnapshot,
+    empty_target_snapshot,
+    make_target_snapshot,
+    normalize_chatgpt_source,
+    plan_chatgpt_import,
+    probe_source,
+    scan_chatgpt_source,
+)
+
+__all__ = [
+    "ACTIVE_PATH_COMPAT",
+    "ALL_REACHABLE_AUDIT",
+    "AdapterLimits",
+    "AttachmentOccurrence",
+    "ChatGPTAdapter",
+    "ChatGPTAdapterError",
+    "ChatGPTPlanningResult",
+    "NormalizedBundle",
+    "SourceAuditSummary",
+    "SourceProbe",
+    "TargetSnapshot",
+    "empty_target_snapshot",
+    "make_target_snapshot",
+    "normalize_chatgpt_source",
+    "plan_chatgpt_import",
+    "probe_source",
+    "scan_chatgpt_source",
+]

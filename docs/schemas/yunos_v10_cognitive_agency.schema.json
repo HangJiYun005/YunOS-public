@@ -1,0 +1,1752 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.yunos.invalid/schemas/v10/cognitive-agency.schema.json",
+  "title": "YunOS v10 Bounded Cognitive Agency Contracts",
+  "description": "Strict design contracts for bounded cognitive agency. Search mode remains local and never invokes a provider.",
+  "type": "object",
+  "required": ["schema_generation", "document_type", "document"],
+  "properties": {
+    "schema_generation": {"const": 10001},
+    "document_type": {
+      "enum": [
+        "objective_contract",
+        "plan_graph",
+        "provider_profile",
+        "capability",
+        "context_binding",
+        "authorization_artifact",
+        "tool_proposal",
+        "tool_execution",
+        "cognitive_run",
+        "cognitive_run_checkpoint",
+        "supervision_event",
+        "verification_record",
+        "learning_candidate"
+      ]
+    },
+    "document": {
+      "oneOf": [
+        {"$ref": "#/$defs/objective_contract"},
+        {"$ref": "#/$defs/plan_graph"},
+        {"$ref": "#/$defs/provider_profile"},
+        {"$ref": "#/$defs/capability"},
+        {"$ref": "#/$defs/context_binding"},
+        {"$ref": "#/$defs/authorization_artifact"},
+        {"$ref": "#/$defs/tool_proposal"},
+        {"$ref": "#/$defs/tool_execution"},
+        {"$ref": "#/$defs/cognitive_run"},
+        {"$ref": "#/$defs/cognitive_run_checkpoint"},
+        {"$ref": "#/$defs/supervision_event"},
+        {"$ref": "#/$defs/verification_record"},
+        {"$ref": "#/$defs/learning_candidate"}
+      ]
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"document_type": {"const": "objective_contract"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/objective_contract"}}}},
+    {"if": {"properties": {"document_type": {"const": "plan_graph"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/plan_graph"}}}},
+    {"if": {"properties": {"document_type": {"const": "provider_profile"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/provider_profile"}}}},
+    {"if": {"properties": {"document_type": {"const": "capability"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/capability"}}}},
+    {"if": {"properties": {"document_type": {"const": "context_binding"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/context_binding"}}}},
+    {"if": {"properties": {"document_type": {"const": "authorization_artifact"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/authorization_artifact"}}}},
+    {"if": {"properties": {"document_type": {"const": "tool_proposal"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/tool_proposal"}}}},
+    {"if": {"properties": {"document_type": {"const": "tool_execution"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/tool_execution"}}}},
+    {"if": {"properties": {"document_type": {"const": "cognitive_run"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/cognitive_run"}}}},
+    {"if": {"properties": {"document_type": {"const": "cognitive_run_checkpoint"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/cognitive_run_checkpoint"}}}},
+    {"if": {"properties": {"document_type": {"const": "supervision_event"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/supervision_event"}}}},
+    {"if": {"properties": {"document_type": {"const": "verification_record"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/verification_record"}}}},
+    {"if": {"properties": {"document_type": {"const": "learning_candidate"}}, "required": ["document_type"]}, "then": {"properties": {"document": {"$ref": "#/$defs/learning_candidate"}}}}
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_.:-]{2,191}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nullable_timestamp": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "string_list": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 4096},
+      "uniqueItems": true
+    },
+    "identity_list": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/identity"},
+      "uniqueItems": true
+    },
+    "agency_level": {
+      "enum": ["consult", "plan", "prepare", "act"]
+    },
+    "agency_selection": {
+      "type": "object",
+      "required": [
+        "selected_level",
+        "selected_by",
+        "maximum_authorized_level",
+        "source_anchor_id",
+        "source_anchor_digest",
+        "selection_digest"
+      ],
+      "properties": {
+        "selected_level": {"$ref": "#/$defs/agency_level"},
+        "selected_by": {"enum": ["default", "user", "preauthorized_rule"]},
+        "maximum_authorized_level": {"$ref": "#/$defs/agency_level"},
+        "source_anchor_id": {
+          "oneOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "source_anchor_digest": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "selection_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "cognitive_stance": {
+      "enum": ["continue", "explore", "breakthrough"]
+    },
+    "risk_class": {
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "source_anchor_reference": {
+      "type": "object",
+      "required": ["anchor_id", "source_kind", "locator", "evidence_digest", "observed_at", "privacy_scope"],
+      "properties": {
+        "anchor_id": {"$ref": "#/$defs/identity"},
+        "source_kind": {
+          "enum": [
+            "user_declaration",
+            "git",
+            "database",
+            "file",
+            "service",
+            "runtime",
+            "approved_memory",
+            "test"
+          ]
+        },
+        "locator": {"type": "string", "minLength": 1, "maxLength": 512},
+        "evidence_digest": {"$ref": "#/$defs/sha256"},
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "privacy_scope": {
+          "enum": ["public", "private_metadata", "private_content", "secret_reference"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "acceptance_policy": {
+      "type": "object",
+      "required": [
+        "mode",
+        "automatic_allowed",
+        "requires_user_event",
+        "deterministic_criteria",
+        "maximum_risk",
+        "require_system_verification",
+        "require_reversible",
+        "require_no_conflicts",
+        "require_no_overreach",
+        "require_no_unresolved_warnings",
+        "preauthorization_reference",
+        "preauthorization_digest"
+      ],
+      "properties": {
+        "mode": {"enum": ["explicit_user", "preauthorized_deterministic"]},
+        "automatic_allowed": {"type": "boolean", "default": false},
+        "requires_user_event": {"type": "boolean", "default": true},
+        "deterministic_criteria": {"$ref": "#/$defs/string_list"},
+        "maximum_risk": {"enum": ["low", "medium", "high"], "default": "low"},
+        "require_system_verification": {"type": "boolean", "const": true},
+        "require_reversible": {"type": "boolean", "const": true},
+        "require_no_conflicts": {"type": "boolean", "const": true},
+        "require_no_overreach": {"type": "boolean", "const": true},
+        "require_no_unresolved_warnings": {"type": "boolean", "const": true},
+        "preauthorization_reference": {
+          "oneOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "preauthorization_digest": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        }
+      },
+      "additionalProperties": false
+    },
+    "authority_request": {
+      "type": "object",
+      "required": [
+        "requested",
+        "read_roots",
+        "write_roots",
+        "capabilities",
+        "commands",
+        "risk_ceiling",
+        "commit_permission",
+        "merge_permission",
+        "tag_permission",
+        "push_permission",
+        "network_permission",
+        "database_permission"
+      ],
+      "properties": {
+        "requested": {"type": "boolean", "default": false},
+        "read_roots": {"$ref": "#/$defs/string_list"},
+        "write_roots": {"$ref": "#/$defs/string_list"},
+        "capabilities": {"$ref": "#/$defs/identity_list"},
+        "commands": {"$ref": "#/$defs/string_list"},
+        "risk_ceiling": {"$ref": "#/$defs/risk_class"},
+        "commit_permission": {"type": "boolean", "default": false},
+        "merge_permission": {"type": "boolean", "default": false},
+        "tag_permission": {"type": "boolean", "default": false},
+        "push_permission": {"type": "boolean", "default": false},
+        "network_permission": {"type": "boolean", "default": false},
+        "database_permission": {"enum": ["none", "readonly", "write"], "default": "none"}
+      },
+      "additionalProperties": false
+    },
+    "objective_contract": {
+      "type": "object",
+      "required": [
+        "objective_id",
+        "user_utterance",
+        "interpreted_goal",
+        "project_id",
+        "agency_level",
+        "agency_selection",
+        "cognitive_stance",
+        "success_criteria",
+        "prohibited_outcomes",
+        "risk_tolerance",
+        "time_constraints",
+        "resource_constraints",
+        "assumptions",
+        "ambiguities",
+        "clarification_required",
+        "context_requirements",
+        "acceptance_policy",
+        "authority_request",
+        "source_anchors",
+        "canonical_digest",
+        "version"
+      ],
+      "properties": {
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "user_utterance": {"$ref": "#/$defs/non_empty_string"},
+        "interpreted_goal": {"$ref": "#/$defs/non_empty_string"},
+        "project_id": {"$ref": "#/$defs/identity"},
+        "agency_level": {"$ref": "#/$defs/agency_level"},
+        "agency_selection": {"$ref": "#/$defs/agency_selection"},
+        "cognitive_stance": {"$ref": "#/$defs/cognitive_stance"},
+        "success_criteria": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/non_empty_string"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "prohibited_outcomes": {"$ref": "#/$defs/string_list"},
+        "risk_tolerance": {"$ref": "#/$defs/risk_class"},
+        "time_constraints": {"$ref": "#/$defs/string_list"},
+        "resource_constraints": {"$ref": "#/$defs/string_list"},
+        "assumptions": {"$ref": "#/$defs/string_list"},
+        "ambiguities": {"$ref": "#/$defs/string_list"},
+        "clarification_required": {"type": "boolean"},
+        "context_requirements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source_system", "purpose", "maximum_items", "maximum_bytes", "required"],
+            "properties": {
+              "source_system": {"enum": ["v7_memory", "v9_now", "v9_resume", "project", "runtime"]},
+              "purpose": {"$ref": "#/$defs/non_empty_string"},
+              "maximum_items": {"type": "integer", "minimum": 1},
+              "maximum_bytes": {"type": "integer", "minimum": 256},
+              "required": {"type": "boolean"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "acceptance_policy": {"$ref": "#/$defs/acceptance_policy"},
+        "authority_request": {"$ref": "#/$defs/authority_request"},
+        "source_anchors": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/source_anchor_reference"},
+          "minItems": 1
+        },
+        "canonical_digest": {"$ref": "#/$defs/sha256"},
+        "version": {"type": "integer", "minimum": 1}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"agency_level": {"enum": ["consult", "plan"]}},
+            "required": ["agency_level"]
+          },
+          "then": {
+            "properties": {
+              "authority_request": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "write_roots": {"maxItems": 0},
+                      "commit_permission": {"const": false},
+                      "merge_permission": {"const": false},
+                      "tag_permission": {"const": false},
+                      "push_permission": {"const": false},
+                      "network_permission": {"const": false},
+                      "database_permission": {"enum": ["none", "readonly"]}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "retry_policy": {
+      "type": "object",
+      "required": ["maximum_attempts", "equivalent_retry_limit", "backoff_ms", "retryable_failures"],
+      "properties": {
+        "maximum_attempts": {"type": "integer", "minimum": 1, "maximum": 2},
+        "equivalent_retry_limit": {"type": "integer", "minimum": 0, "maximum": 1},
+        "backoff_ms": {"type": "integer", "minimum": 0, "maximum": 60000},
+        "retryable_failures": {"$ref": "#/$defs/string_list"}
+      },
+      "additionalProperties": false
+    },
+    "capability_requirement": {
+      "type": "object",
+      "required": [
+        "capability_id",
+        "capability_version",
+        "capability_digest"
+      ],
+      "properties": {
+        "capability_id": {"$ref": "#/$defs/identity"},
+        "capability_version": {"type": "integer", "minimum": 1},
+        "capability_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "plan_node": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "objective_id",
+        "title",
+        "purpose",
+        "dependencies",
+        "node_kind",
+        "capability_requirements",
+        "read_scope",
+        "write_scope",
+        "risk",
+        "reversible",
+        "authority_requirement",
+        "success_criteria",
+        "verification",
+        "rollback",
+        "timeout_ms",
+        "retry_policy",
+        "state",
+        "evidence",
+        "omitted_reason"
+      ],
+      "properties": {
+        "node_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "title": {"$ref": "#/$defs/non_empty_string"},
+        "purpose": {"$ref": "#/$defs/non_empty_string"},
+        "dependencies": {"$ref": "#/$defs/identity_list"},
+        "node_kind": {
+          "enum": ["action", "decision", "human_gate", "rollback", "alternative", "verification"]
+        },
+        "capability_requirements": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/capability_requirement"},
+          "uniqueItems": true
+        },
+        "read_scope": {"$ref": "#/$defs/string_list"},
+        "write_scope": {"$ref": "#/$defs/string_list"},
+        "risk": {"$ref": "#/$defs/risk_class"},
+        "reversible": {"type": "boolean"},
+        "authority_requirement": {
+          "enum": ["none", "read", "prepare", "explicit_act", "human_gate"]
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/non_empty_string"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "verification": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/non_empty_string"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "rollback": {"$ref": "#/$defs/string_list"},
+        "timeout_ms": {"type": "integer", "minimum": 1, "maximum": 1200000},
+        "retry_policy": {"$ref": "#/$defs/retry_policy"},
+        "state": {
+          "enum": [
+            "proposed",
+            "ready",
+            "running",
+            "waiting_authority",
+            "waiting_external",
+            "verifying",
+            "completed",
+            "failed",
+            "cancelled",
+            "omitted",
+            "rollback_required",
+            "rolled_back"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/source_anchor_reference"}
+        },
+        "omitted_reason": {
+          "anyOf": [
+            {"$ref": "#/$defs/non_empty_string"},
+            {"type": "null"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"state": {"const": "omitted"}},
+            "required": ["state"]
+          },
+          "then": {
+            "properties": {
+              "omitted_reason": {"$ref": "#/$defs/non_empty_string"}
+            }
+          },
+          "else": {
+            "properties": {"omitted_reason": {"type": "null"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"node_kind": {"const": "human_gate"}},
+            "required": ["node_kind"]
+          },
+          "then": {
+            "properties": {
+              "authority_requirement": {"const": "human_gate"},
+              "state": {
+                "enum": ["proposed", "waiting_authority", "completed"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"node_kind": {"const": "rollback"}},
+            "required": ["node_kind"]
+          },
+          "then": {"properties": {"rollback": {"minItems": 1}}}
+        },
+        {
+          "if": {
+            "properties": {"reversible": {"const": false}},
+            "required": ["reversible"]
+          },
+          "then": {
+            "properties": {
+              "authority_requirement": {
+                "enum": ["explicit_act", "human_gate"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "write_scope": {"minItems": 1},
+              "reversible": {"const": true}
+            },
+            "required": ["write_scope", "reversible"]
+          },
+          "then": {"properties": {"rollback": {"minItems": 1}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "plan_edge": {
+      "type": "object",
+      "required": ["edge_id", "from_node_id", "to_node_id", "edge_kind", "condition", "priority"],
+      "properties": {
+        "edge_id": {"$ref": "#/$defs/identity"},
+        "from_node_id": {"$ref": "#/$defs/identity"},
+        "to_node_id": {"$ref": "#/$defs/identity"},
+        "edge_kind": {
+          "enum": ["sequence", "parallel", "decision", "failure", "rollback", "alternative", "resume"]
+        },
+        "condition": {
+          "anyOf": [
+            {"$ref": "#/$defs/non_empty_string"},
+            {"type": "null"}
+          ]
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "edge_kind": {
+                "enum": ["decision", "failure", "alternative"]
+              }
+            },
+            "required": ["edge_kind"]
+          },
+          "then": {
+            "properties": {
+              "condition": {"$ref": "#/$defs/non_empty_string"}
+            }
+          },
+          "else": {"properties": {"condition": {"type": "null"}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "plan_revision": {
+      "type": "object",
+      "required": [
+        "revision_id",
+        "plan_id",
+        "from_version",
+        "to_version",
+        "change_reason",
+        "authority_impact",
+        "previous_digest",
+        "plan_digest",
+        "revision_digest",
+        "created_at",
+        "created_by"
+      ],
+      "properties": {
+        "revision_id": {"$ref": "#/$defs/identity"},
+        "plan_id": {"$ref": "#/$defs/identity"},
+        "from_version": {
+          "anyOf": [
+            {"type": "integer", "minimum": 1},
+            {"type": "null"}
+          ]
+        },
+        "to_version": {"type": "integer", "minimum": 1},
+        "change_reason": {"$ref": "#/$defs/non_empty_string"},
+        "authority_impact": {
+          "enum": ["none", "narrows_scope", "requires_new_authority"]
+        },
+        "previous_digest": {
+          "anyOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "plan_digest": {"$ref": "#/$defs/sha256"},
+        "revision_digest": {"$ref": "#/$defs/sha256"},
+        "created_at": {"$ref": "#/$defs/timestamp"},
+        "created_by": {"enum": ["user", "agent", "system"]}
+      },
+      "additionalProperties": false
+    },
+    "plan_graph": {
+      "type": "object",
+      "required": [
+        "plan_id",
+        "objective_id",
+        "objective_version",
+        "objective_digest",
+        "nodes",
+        "edges",
+        "revisions",
+        "entry_node_ids",
+        "terminal_node_ids",
+        "plan_digest",
+        "version"
+      ],
+      "properties": {
+        "plan_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "objective_version": {"type": "integer", "minimum": 1},
+        "objective_digest": {"$ref": "#/$defs/sha256"},
+        "nodes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/plan_node"},
+          "minItems": 1
+        },
+        "edges": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/plan_edge"}
+        },
+        "revisions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/plan_revision"},
+          "minItems": 1
+        },
+        "entry_node_ids": {"$ref": "#/$defs/identity_list"},
+        "terminal_node_ids": {"$ref": "#/$defs/identity_list"},
+        "plan_digest": {"$ref": "#/$defs/sha256"},
+        "version": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "provider_profile": {
+      "type": "object",
+      "required": [
+        "contract_version",
+        "provider_id",
+        "display_name",
+        "profile_version",
+        "adapter_kind",
+        "adapter_version",
+        "endpoint",
+        "model",
+        "capability_flags",
+        "tool_calling_support",
+        "structured_output_support",
+        "context_limit_tokens",
+        "timeout_ms",
+        "reasoning_options",
+        "cost_metadata",
+        "enabled",
+        "secret_reference",
+        "health_state",
+        "health_reason",
+        "profile_digest"
+      ],
+      "properties": {
+        "contract_version": {"type": "integer", "const": 1},
+        "provider_id": {"$ref": "#/$defs/identity"},
+        "display_name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "profile_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "adapter_kind": {
+          "enum": [
+            "deepseek_v8_runtime",
+            "openai_compatible",
+            "local_openai_compatible",
+            "fake"
+          ]
+        },
+        "adapter_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+        },
+        "endpoint": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+\\-]{0,127}$"
+        },
+        "capability_flags": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "chat",
+              "reasoning",
+              "structured_output",
+              "tool_proposals",
+              "usage_reporting",
+              "local_only",
+              "deterministic_fake"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "tool_calling_support": {
+          "enum": ["none", "compatible", "native"]
+        },
+        "structured_output_support": {
+          "enum": ["none", "json_object", "json_schema"]
+        },
+        "context_limit_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4194304
+        },
+        "timeout_ms": {"type": "integer", "minimum": 1, "maximum": 1200000},
+        "reasoning_options": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "disabled",
+              "provider_default",
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "cost_metadata": {
+          "type": "object",
+          "required": [
+            "pricing_state",
+            "currency",
+            "input_microunits_per_million_tokens",
+            "output_microunits_per_million_tokens"
+          ],
+          "properties": {
+            "pricing_state": {
+              "enum": ["known", "unknown", "not_applicable"]
+            },
+            "currency": {
+              "type": ["string", "null"],
+              "enum": ["USD", "CNY", null]
+            },
+            "input_microunits_per_million_tokens": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 1000000000000000
+            },
+            "output_microunits_per_million_tokens": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 1000000000000000
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {"pricing_state": {"const": "known"}},
+                "required": ["pricing_state"]
+              },
+              "then": {
+                "properties": {
+                  "currency": {"enum": ["USD", "CNY"]},
+                  "input_microunits_per_million_tokens": {"type": "integer"},
+                  "output_microunits_per_million_tokens": {"type": "integer"}
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {"pricing_state": {"const": "unknown"}},
+                "required": ["pricing_state"]
+              },
+              "then": {
+                "properties": {
+                  "currency": {"enum": ["USD", "CNY"]},
+                  "input_microunits_per_million_tokens": {"const": null},
+                  "output_microunits_per_million_tokens": {"const": null}
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "pricing_state": {"const": "not_applicable"}
+                },
+                "required": ["pricing_state"]
+              },
+              "then": {
+                "properties": {
+                  "currency": {"const": null},
+                  "input_microunits_per_million_tokens": {"const": null},
+                  "output_microunits_per_million_tokens": {"const": null}
+                }
+              }
+            }
+          ],
+          "additionalProperties": false
+        },
+        "enabled": {"type": "boolean"},
+        "secret_reference": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "required": ["reference_id", "resolver_kind", "required"],
+              "properties": {
+                "reference_id": {
+                  "type": "string",
+                  "pattern": "^secret\\.[a-z][a-z0-9_.-]{2,127}$"
+                },
+                "resolver_kind": {
+                  "enum": [
+                    "v8_private_file",
+                    "environment",
+                    "os_keychain",
+                    "local_broker"
+                  ]
+                },
+                "required": {"type": "boolean"}
+              },
+              "additionalProperties": false
+            }
+          ],
+          "description": "Opaque reference only; never a plaintext secret."
+        },
+        "health_state": {
+          "enum": ["healthy", "degraded", "unknown", "unavailable", "disabled"]
+        },
+        "health_reason": {
+          "enum": [
+            "ready",
+            "health_not_checked",
+            "credential_reference_unavailable",
+            "profile_disabled",
+            "provider_degraded",
+            "provider_unavailable",
+            "test_only"
+          ]
+        },
+        "profile_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"adapter_kind": {"const": "fake"}},
+            "required": ["adapter_kind"]
+          },
+          "then": {
+            "properties": {
+              "endpoint": {
+                "pattern": "^[Ff][Aa][Kk][Ee]://contract(?:/[^?#\\s]*)?$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "adapter_kind": {"const": "local_openai_compatible"}
+            },
+            "required": ["adapter_kind"]
+          },
+          "then": {
+            "properties": {
+              "endpoint": {
+                "pattern": "^[Hh][Tt][Tt][Pp]://(?:127\\.0\\.0\\.1|[Ll][Oo][Cc][Aa][Ll][Hh][Oo][Ss][Tt]|\\[::1\\])(?::[0-9]+)?(?:/[^?#\\s]*)?$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "adapter_kind": {
+                "enum": ["deepseek_v8_runtime", "openai_compatible"]
+              }
+            },
+            "required": ["adapter_kind"]
+          },
+          "then": {
+            "properties": {
+              "endpoint": {
+                "pattern": "^[Hh][Tt][Tt][Pp][Ss]://[^/?#@\\s]+(?:/[^?#\\s]*)?$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"enabled": {"const": true}},
+            "required": ["enabled"]
+          },
+          "then": {
+            "properties": {
+              "health_state": {"not": {"const": "disabled"}}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"enabled": {"const": false}},
+            "required": ["enabled"]
+          },
+          "then": {
+            "properties": {
+              "health_state": {"const": "disabled"},
+              "health_reason": {"const": "profile_disabled"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"health_state": {"const": "healthy"}},
+            "required": ["health_state"]
+          },
+          "then": {
+            "properties": {
+              "health_reason": {"enum": ["ready", "test_only"]}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "health_reason": {
+                "const": "credential_reference_unavailable"
+              }
+            },
+            "required": ["health_reason"]
+          },
+          "then": {
+            "properties": {
+              "health_state": {"const": "unavailable"},
+              "secret_reference": {
+                "type": "object",
+                "required": ["required"],
+                "properties": {"required": {"const": true}}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"tool_calling_support": {"const": "none"}},
+            "required": ["tool_calling_support"]
+          },
+          "then": {
+            "properties": {
+              "capability_flags": {
+                "not": {"contains": {"const": "tool_proposals"}}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tool_calling_support": {"enum": ["compatible", "native"]}
+            },
+            "required": ["tool_calling_support"]
+          },
+          "then": {
+            "properties": {
+              "capability_flags": {
+                "contains": {"const": "tool_proposals"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "structured_output_support": {"const": "none"}
+            },
+            "required": ["structured_output_support"]
+          },
+          "then": {
+            "properties": {
+              "capability_flags": {
+                "not": {"contains": {"const": "structured_output"}}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "structured_output_support": {
+                "enum": ["json_object", "json_schema"]
+              }
+            },
+            "required": ["structured_output_support"]
+          },
+          "then": {
+            "properties": {
+              "capability_flags": {
+                "contains": {"const": "structured_output"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "capability_flags": {"contains": {"const": "reasoning"}}
+            },
+            "required": ["capability_flags"]
+          },
+          "then": {
+            "properties": {
+              "reasoning_options": {"not": {"const": ["disabled"]}}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "capability_flags": {"contains": {"const": "local_only"}}
+            },
+            "required": ["capability_flags"]
+          },
+          "then": {
+            "properties": {
+              "adapter_kind": {"const": "local_openai_compatible"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "capability_flags": {
+                "contains": {"const": "deterministic_fake"}
+              }
+            },
+            "required": ["capability_flags"]
+          },
+          "then": {
+            "properties": {"adapter_kind": {"const": "fake"}}
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "capability": {
+      "type": "object",
+      "required": [
+        "capability_id",
+        "display_name",
+        "version",
+        "input_schema",
+        "output_schema",
+        "risk_class",
+        "reversible",
+        "read_scopes",
+        "write_scopes",
+        "required_authority",
+        "timeout_ms",
+        "max_output_bytes",
+        "idempotency",
+        "verification_method",
+        "availability",
+        "executor_kind"
+      ],
+      "properties": {
+        "capability_id": {"$ref": "#/$defs/identity"},
+        "display_name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "version": {"type": "integer", "minimum": 1},
+        "input_schema": {"type": "object"},
+        "output_schema": {"type": "object"},
+        "risk_class": {"$ref": "#/$defs/risk_class"},
+        "reversible": {"type": "boolean"},
+        "read_scopes": {"$ref": "#/$defs/string_list"},
+        "write_scopes": {"$ref": "#/$defs/string_list"},
+        "required_authority": {
+          "enum": ["none", "read", "prepare", "explicit_act"]
+        },
+        "timeout_ms": {"type": "integer", "minimum": 1, "maximum": 1200000},
+        "max_output_bytes": {"type": "integer", "minimum": 1, "maximum": 104857600},
+        "idempotency": {
+          "enum": ["read_only", "idempotent", "exactly_once", "non_idempotent"]
+        },
+        "verification_method": {"$ref": "#/$defs/string_list"},
+        "availability": {
+          "enum": ["available", "unavailable", "disabled", "handoff_only"]
+        },
+        "executor_kind": {
+          "enum": ["native", "runtime", "codex", "external_agent", "local_broker"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "context_binding": {
+      "type": "object",
+      "required": [
+        "binding_id",
+        "objective_id",
+        "source_system",
+        "source_reference",
+        "source_digest",
+        "purpose",
+        "selected_items",
+        "canonical_bytes",
+        "maximum_items",
+        "maximum_bytes",
+        "freshness",
+        "omitted_reasons",
+        "contains_secret",
+        "binding_digest"
+      ],
+      "properties": {
+        "binding_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "source_system": {
+          "enum": ["v7_memory", "v9_now", "v9_resume", "project", "runtime"]
+        },
+        "source_reference": {"$ref": "#/$defs/non_empty_string"},
+        "source_digest": {"$ref": "#/$defs/sha256"},
+        "purpose": {"$ref": "#/$defs/non_empty_string"},
+        "selected_items": {"type": "integer", "minimum": 0},
+        "canonical_bytes": {"type": "integer", "minimum": 0},
+        "maximum_items": {"type": "integer", "minimum": 1},
+        "maximum_bytes": {"type": "integer", "minimum": 256},
+        "freshness": {"enum": ["fresh", "aging", "stale", "unverifiable"]},
+        "omitted_reasons": {"$ref": "#/$defs/string_list"},
+        "contains_secret": {"type": "boolean", "const": false},
+        "binding_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "authorization_artifact": {
+      "type": "object",
+      "required": [
+        "contract_version",
+        "authorization_id",
+        "objective_id",
+        "objective_version",
+        "objective_digest",
+        "plan_id",
+        "plan_version",
+        "plan_digest",
+        "project_id",
+        "delegation_id",
+        "delegation_digest",
+        "source_authority_id",
+        "source_authority_digest",
+        "issuer_kind",
+        "issuer_id",
+        "nonce_digest",
+        "read_roots",
+        "write_roots",
+        "allowed_capabilities",
+        "denied_capabilities",
+        "allowed_commands",
+        "risk_ceiling",
+        "max_steps",
+        "max_duration_ms",
+        "max_model_calls",
+        "max_tokens",
+        "max_cost_microunits",
+        "commit_permission",
+        "merge_permission",
+        "tag_permission",
+        "push_permission",
+        "network_permission",
+        "database_permission",
+        "next_version_creation_permission",
+        "persistent_background_agent_permission",
+        "valid_from",
+        "expires_at",
+        "rollback_policy",
+        "acceptance_policy",
+        "authority_digest"
+      ],
+      "properties": {
+        "contract_version": {"type": "integer", "const": 1},
+        "authorization_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "objective_version": {"type": "integer", "minimum": 1},
+        "objective_digest": {"$ref": "#/$defs/sha256"},
+        "plan_id": {"$ref": "#/$defs/identity"},
+        "plan_version": {"type": "integer", "minimum": 1},
+        "plan_digest": {"$ref": "#/$defs/sha256"},
+        "project_id": {"$ref": "#/$defs/identity"},
+        "delegation_id": {"$ref": "#/$defs/identity"},
+        "delegation_digest": {"$ref": "#/$defs/sha256"},
+        "source_authority_id": {"$ref": "#/$defs/identity"},
+        "source_authority_digest": {"$ref": "#/$defs/sha256"},
+        "issuer_kind": {"const": "user"},
+        "issuer_id": {"$ref": "#/$defs/identity"},
+        "nonce_digest": {"$ref": "#/$defs/sha256"},
+        "read_roots": {"$ref": "#/$defs/string_list"},
+        "write_roots": {"$ref": "#/$defs/string_list"},
+        "allowed_capabilities": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/capability_requirement"},
+          "uniqueItems": true
+        },
+        "denied_capabilities": {"$ref": "#/$defs/identity_list"},
+        "allowed_commands": {"$ref": "#/$defs/string_list"},
+        "risk_ceiling": {"$ref": "#/$defs/risk_class"},
+        "max_steps": {"type": "integer", "minimum": 1},
+        "max_duration_ms": {"type": "integer", "minimum": 1, "maximum": 86400000},
+        "max_model_calls": {"type": "integer", "minimum": 0},
+        "max_tokens": {"type": "integer", "minimum": 0},
+        "max_cost_microunits": {"type": "integer", "minimum": 0},
+        "commit_permission": {"type": "boolean", "default": false},
+        "merge_permission": {"type": "boolean", "const": false, "default": false},
+        "tag_permission": {"type": "boolean", "const": false, "default": false},
+        "push_permission": {"type": "boolean", "const": false, "default": false},
+        "network_permission": {"type": "boolean", "const": false, "default": false},
+        "database_permission": {"enum": ["none", "readonly"], "default": "none"},
+        "next_version_creation_permission": {"type": "boolean", "const": false, "default": false},
+        "persistent_background_agent_permission": {"type": "boolean", "const": false, "default": false},
+        "valid_from": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/timestamp"},
+        "rollback_policy": {"$ref": "#/$defs/string_list"},
+        "acceptance_policy": {"$ref": "#/$defs/acceptance_policy"},
+        "authority_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "tool_proposal": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "proposal_id",
+        "run_id",
+        "objective_id",
+        "objective_digest",
+        "plan_id",
+        "plan_version",
+        "plan_digest",
+        "plan_node_id",
+        "capability_id",
+        "capability_version",
+        "capability_digest",
+        "typed_arguments",
+        "argument_digest",
+        "idempotency_key",
+        "reason",
+        "expected_observation",
+        "risk_class",
+        "authorization_id",
+        "authorization_digest",
+        "runtime_execution_reference",
+        "runtime_receipt_digest",
+        "status",
+        "proposed_at",
+        "proposal_digest"
+      ],
+      "properties": {
+        "protocol_version": {"type": "integer", "const": 1},
+        "proposal_id": {"$ref": "#/$defs/identity"},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "objective_digest": {"$ref": "#/$defs/sha256"},
+        "plan_id": {"$ref": "#/$defs/identity"},
+        "plan_version": {"type": "integer", "minimum": 1},
+        "plan_digest": {"$ref": "#/$defs/sha256"},
+        "plan_node_id": {"$ref": "#/$defs/identity"},
+        "capability_id": {"$ref": "#/$defs/identity"},
+        "capability_version": {"type": "integer", "minimum": 1},
+        "capability_digest": {"$ref": "#/$defs/sha256"},
+        "typed_arguments": {"type": "object"},
+        "argument_digest": {"$ref": "#/$defs/sha256"},
+        "idempotency_key": {"$ref": "#/$defs/identity"},
+        "reason": {"$ref": "#/$defs/non_empty_string"},
+        "expected_observation": {"$ref": "#/$defs/non_empty_string"},
+        "risk_class": {"$ref": "#/$defs/risk_class"},
+        "authorization_id": {"$ref": "#/$defs/identity"},
+        "authorization_digest": {"$ref": "#/$defs/sha256"},
+        "runtime_execution_reference": {
+          "anyOf": [
+            {"type": "string", "minLength": 1, "maxLength": 512},
+            {"type": "null"}
+          ]
+        },
+        "runtime_receipt_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "status": {"const": "proposed"},
+        "proposed_at": {"$ref": "#/$defs/timestamp"},
+        "proposal_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "tool_execution": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "execution_id",
+        "proposal_id",
+        "proposal_digest",
+        "run_id",
+        "idempotency_key",
+        "reservation_event_id",
+        "reservation_receipt_digest",
+        "preview_id",
+        "preview_digest",
+        "attempt_number",
+        "invocation_kind",
+        "executor_kind",
+        "resolved_argv",
+        "working_directory",
+        "policy_decision",
+        "reason_codes",
+        "started_at",
+        "finished_at",
+        "status",
+        "exit_code",
+        "output",
+        "stdout_digest",
+        "stderr_digest",
+        "artifact_references",
+        "runtime_execution_reference",
+        "runtime_receipt_digest",
+        "verification_status",
+        "execution_digest"
+      ],
+      "properties": {
+        "protocol_version": {"type": "integer", "const": 1},
+        "execution_id": {"$ref": "#/$defs/identity"},
+        "proposal_id": {"$ref": "#/$defs/identity"},
+        "proposal_digest": {"$ref": "#/$defs/sha256"},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "idempotency_key": {"$ref": "#/$defs/identity"},
+        "reservation_event_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "reservation_receipt_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "preview_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "preview_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "attempt_number": {"type": "integer", "minimum": 1, "maximum": 2},
+        "invocation_kind": {
+          "enum": ["native_call", "fixed_process", "denied"]
+        },
+        "executor_kind": {
+          "enum": ["native", "runtime", "codex", "external_agent", "local_broker"]
+        },
+        "resolved_argv": {
+          "type": "array",
+          "items": {"type": "string", "maxLength": 4096},
+          "minItems": 0
+        },
+        "working_directory": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "policy_decision": {
+          "enum": ["allow", "deny_schema", "deny_scope", "deny_authority", "deny_risk", "deny_path", "deny_command", "deny_secret", "deny_budget", "deny_replay"]
+        },
+        "reason_codes": {"$ref": "#/$defs/string_list"},
+        "started_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "finished_at": {"$ref": "#/$defs/timestamp"},
+        "status": {
+          "enum": ["denied", "succeeded", "failed", "cancelled", "recovery_required"]
+        },
+        "exit_code": {"type": ["integer", "null"]},
+        "output": {"type": "object"},
+        "stdout_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "stderr_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "artifact_references": {"$ref": "#/$defs/string_list"},
+        "runtime_execution_reference": {
+          "anyOf": [
+            {"type": "string", "minLength": 1, "maxLength": 512},
+            {"type": "null"}
+          ]
+        },
+        "runtime_receipt_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "verification_status": {"enum": ["pending", "passed", "failed", "unverifiable"]},
+        "execution_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"policy_decision": {"const": "allow"}},
+            "required": ["policy_decision"]
+          },
+          "then": {
+            "properties": {
+              "working_directory": {"type": "string", "minLength": 1},
+              "started_at": {"$ref": "#/$defs/timestamp"},
+              "reservation_event_id": {"$ref": "#/$defs/identity"},
+              "reservation_receipt_digest": {"$ref": "#/$defs/sha256"},
+              "preview_id": {"$ref": "#/$defs/identity"},
+              "preview_digest": {"$ref": "#/$defs/sha256"},
+              "status": {
+                "enum": ["succeeded", "failed", "cancelled", "recovery_required"]
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {"invocation_kind": {"const": "native_call"}},
+                  "required": ["invocation_kind"]
+                },
+                "then": {"properties": {"resolved_argv": {"maxItems": 0}}},
+                "else": {
+                  "properties": {
+                    "invocation_kind": {"const": "fixed_process"},
+                    "resolved_argv": {"minItems": 1}
+                  }
+                }
+              }
+            ]
+          },
+          "else": {
+            "properties": {
+              "resolved_argv": {"maxItems": 0},
+              "working_directory": {"type": "null"},
+              "started_at": {"type": "null"},
+              "reservation_event_id": {"type": "null"},
+              "reservation_receipt_digest": {"type": "null"},
+              "preview_id": {"type": "null"},
+              "preview_digest": {"type": "null"},
+              "invocation_kind": {"const": "denied"},
+              "status": {"const": "denied"},
+              "exit_code": {"type": "null"}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "cognitive_run": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "run_id",
+        "objective_id",
+        "objective_version",
+        "objective_digest",
+        "plan_id",
+        "plan_version",
+        "plan_digest",
+        "provider_id",
+        "provider_profile_version",
+        "provider_profile_digest",
+        "authorization_id",
+        "authorization_digest",
+        "status",
+        "checkpoint_sequence",
+        "last_safe_checkpoint",
+        "model_calls_used",
+        "tokens_used",
+        "cost_used_microunits",
+        "steps_used",
+        "started_at",
+        "last_activity_at",
+        "ended_at",
+        "failure_code",
+        "run_digest"
+      ],
+      "properties": {
+        "protocol_version": {"type": "integer", "const": 1},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "objective_version": {"type": "integer", "minimum": 1},
+        "objective_digest": {"$ref": "#/$defs/sha256"},
+        "plan_id": {"$ref": "#/$defs/identity"},
+        "plan_version": {"type": "integer", "minimum": 1},
+        "plan_digest": {"$ref": "#/$defs/sha256"},
+        "provider_id": {"$ref": "#/$defs/identity"},
+        "provider_profile_version": {"type": "integer", "minimum": 1},
+        "provider_profile_digest": {"$ref": "#/$defs/sha256"},
+        "authorization_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "authorization_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "reasoning",
+            "planning",
+            "waiting_authority",
+            "executing",
+            "waiting_external",
+            "verifying",
+            "waiting_acceptance",
+            "completed",
+            "failed",
+            "cancelled",
+            "recovery_required"
+          ]
+        },
+        "checkpoint_sequence": {"type": "integer", "minimum": 0},
+        "last_safe_checkpoint": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "model_calls_used": {"type": "integer", "minimum": 0},
+        "tokens_used": {"type": "integer", "minimum": 0},
+        "cost_used_microunits": {"type": "integer", "minimum": 0},
+        "steps_used": {"type": "integer", "minimum": 0},
+        "started_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "last_activity_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "ended_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "failure_code": {
+          "anyOf": [
+            {"type": "string", "minLength": 1, "maxLength": 128},
+            {"type": "null"}
+          ]
+        },
+        "run_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "cognitive_run_checkpoint": {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "run_id",
+        "checkpoint_sequence",
+        "safe_to_resume",
+        "run_status",
+        "authorization_digest",
+        "objective_digest",
+        "plan_digest",
+        "provider_profile_digest",
+        "current_node_ids",
+        "completed_node_ids",
+        "model_budget_state",
+        "runtime_recovery_bindings",
+        "proposal_ids",
+        "execution_ids",
+        "idempotency_keys",
+        "last_completed_execution_id",
+        "unsafe_reason_codes",
+        "steps_used",
+        "started_at",
+        "last_activity_at",
+        "ended_at",
+        "failure_code",
+        "recorded_at",
+        "checkpoint_digest"
+      ],
+      "properties": {
+        "protocol_version": {"type": "integer", "const": 1},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "checkpoint_sequence": {"type": "integer", "minimum": 1},
+        "safe_to_resume": {"type": "boolean"},
+        "run_status": {
+          "enum": ["queued", "reasoning", "planning", "waiting_authority", "executing", "waiting_external", "verifying", "waiting_acceptance", "completed", "failed", "cancelled", "recovery_required"]
+        },
+        "authorization_digest": {
+          "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "objective_digest": {"$ref": "#/$defs/sha256"},
+        "plan_digest": {"$ref": "#/$defs/sha256"},
+        "provider_profile_digest": {"$ref": "#/$defs/sha256"},
+        "current_node_ids": {"$ref": "#/$defs/identity_list"},
+        "completed_node_ids": {"$ref": "#/$defs/identity_list"},
+        "model_budget_state": {
+          "type": "object",
+          "required": [
+            "calls_reserved",
+            "input_tokens_reserved",
+            "output_tokens_reserved",
+            "cost_microunits_reserved",
+            "request_digests",
+            "settled_reservation_ids",
+            "actual_input_tokens",
+            "actual_output_tokens",
+            "actual_cost_microunits",
+            "unknown_cost_reserved_ceiling_microunits",
+            "unknown_cost_reservation_ids"
+          ],
+          "properties": {
+            "calls_reserved": {"type": "integer", "minimum": 0},
+            "input_tokens_reserved": {"type": "integer", "minimum": 0},
+            "output_tokens_reserved": {"type": "integer", "minimum": 0},
+            "cost_microunits_reserved": {"type": "integer", "minimum": 0},
+            "request_digests": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/sha256"},
+              "uniqueItems": true
+            },
+            "settled_reservation_ids": {"$ref": "#/$defs/identity_list"},
+            "actual_input_tokens": {"type": "integer", "minimum": 0},
+            "actual_output_tokens": {"type": "integer", "minimum": 0},
+            "actual_cost_microunits": {"type": "integer", "minimum": 0},
+            "unknown_cost_reserved_ceiling_microunits": {"type": "integer", "minimum": 0},
+            "unknown_cost_reservation_ids": {"$ref": "#/$defs/identity_list"}
+          },
+          "additionalProperties": false
+        },
+        "runtime_recovery_bindings": {"type": "array", "items": {"type": "object"}},
+        "proposal_ids": {"$ref": "#/$defs/identity_list"},
+        "execution_ids": {"$ref": "#/$defs/identity_list"},
+        "idempotency_keys": {"$ref": "#/$defs/identity_list"},
+        "last_completed_execution_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "unsafe_reason_codes": {"$ref": "#/$defs/string_list"},
+        "steps_used": {"type": "integer", "minimum": 0},
+        "started_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "last_activity_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "ended_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "failure_code": {
+          "anyOf": [
+            {"type": "string", "minLength": 1, "maxLength": 128},
+            {"type": "null"}
+          ]
+        },
+        "recorded_at": {"$ref": "#/$defs/timestamp"},
+        "checkpoint_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "supervision_event": {
+      "type": "object",
+      "required": [
+        "supervision_event_id",
+        "run_id",
+        "sequence",
+        "event_type",
+        "severity",
+        "plan_node_id",
+        "tool_execution_id",
+        "observed_at",
+        "detail",
+        "evidence_digest",
+        "action_taken",
+        "event_digest"
+      ],
+      "properties": {
+        "supervision_event_id": {"$ref": "#/$defs/identity"},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "sequence": {"type": "integer", "minimum": 1},
+        "event_type": {
+          "enum": [
+            "heartbeat",
+            "checkpoint",
+            "suspected_stall",
+            "stall_cleared",
+            "budget_warning",
+            "budget_exhausted",
+            "overreach_blocked",
+            "authorization_expired",
+            "provider_failure",
+            "process_terminated",
+            "retry_started",
+            "recovery_started",
+            "recovery_completed",
+            "cancellation_requested"
+          ]
+        },
+        "severity": {"enum": ["info", "warning", "error", "critical"]},
+        "plan_node_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "tool_execution_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "detail": {"$ref": "#/$defs/non_empty_string"},
+        "evidence_digest": {"$ref": "#/$defs/sha256"},
+        "action_taken": {"$ref": "#/$defs/string_list"},
+        "event_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "verification_record": {
+      "type": "object",
+      "required": [
+        "verification_id",
+        "run_id",
+        "objective_id",
+        "plan_node_id",
+        "tool_execution_id",
+        "verification_kind",
+        "verifier_kind",
+        "criteria",
+        "result",
+        "evidence_references",
+        "evidence_digest",
+        "verified_at",
+        "acceptance_state",
+        "acceptance_event_id",
+        "verification_digest"
+      ],
+      "properties": {
+        "verification_id": {"$ref": "#/$defs/identity"},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "plan_node_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "tool_execution_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "verification_kind": {
+          "enum": ["file_diff", "test", "git", "schema", "hash", "api", "browser", "static_check", "independent_query", "human_visual", "business_acceptance"]
+        },
+        "verifier_kind": {"enum": ["system", "runtime", "independent_tool", "user"]},
+        "criteria": {"$ref": "#/$defs/string_list"},
+        "result": {"enum": ["passed", "failed", "unverifiable"]},
+        "evidence_references": {"$ref": "#/$defs/string_list"},
+        "evidence_digest": {"$ref": "#/$defs/sha256"},
+        "verified_at": {"$ref": "#/$defs/timestamp"},
+        "acceptance_state": {"enum": ["not_requested", "waiting", "accepted", "rejected"]},
+        "acceptance_event_id": {
+          "anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]
+        },
+        "verification_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "learning_candidate": {
+      "type": "object",
+      "required": [
+        "candidate_id",
+        "run_id",
+        "objective_id",
+        "candidate_kind",
+        "statement",
+        "source_outcome_id",
+        "source_verification_ids",
+        "confidence_ppm",
+        "reuse_scope",
+        "status",
+        "requires_user_approval",
+        "long_term_memory_write_allowed",
+        "created_at",
+        "expires_at",
+        "candidate_digest"
+      ],
+      "properties": {
+        "candidate_id": {"$ref": "#/$defs/identity"},
+        "run_id": {"$ref": "#/$defs/identity"},
+        "objective_id": {"$ref": "#/$defs/identity"},
+        "candidate_kind": {
+          "enum": ["fact_record", "observation", "pattern_candidate", "workflow_candidate"]
+        },
+        "statement": {"$ref": "#/$defs/non_empty_string"},
+        "source_outcome_id": {"$ref": "#/$defs/identity"},
+        "source_verification_ids": {"$ref": "#/$defs/identity_list"},
+        "confidence_ppm": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "reuse_scope": {"enum": ["this_run", "this_project", "candidate_only"]},
+        "status": {"enum": ["pending", "approved", "rejected", "expired", "superseded"]},
+        "requires_user_approval": {"type": "boolean", "const": true},
+        "long_term_memory_write_allowed": {"type": "boolean", "const": false},
+        "created_at": {"$ref": "#/$defs/timestamp"},
+        "expires_at": {"$ref": "#/$defs/nullable_timestamp"},
+        "candidate_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

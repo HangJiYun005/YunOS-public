@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YunOS 启动器</title>
+  <link rel="stylesheet" href="launcher.css">
+</head>
+<body>
+  <header><img src="icon.png" alt=""><span>YunOS</span></header>
+  <main>
+    <section aria-label="主机状态">
+      <div class="status"><span id="dot" class="dot starting"></span><strong id="status" role="status">正在检查本机主机…</strong><span class="badge">本机主机</span></div>
+    </section>
+    <button id="open" disabled>正在准备…</button>
+    <nav><button id="retry">重新检查</button><button id="logs">查看启动日志</button></nav>
+  </main>
+  <script src="launcher.js"></script>
+</body>
+</html>

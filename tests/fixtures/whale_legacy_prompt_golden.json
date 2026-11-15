@@ -1,0 +1,30 @@
+{
+  "user_input": "固定黄金问题",
+  "include_general": false,
+  "profile": null,
+  "retrieval_mode": "legacy",
+  "active_profile": null,
+  "active_profile_source": null,
+  "persona": "固定鲸鱼人格。",
+  "summary_rows": [
+    {"summary_type":"memory_space_overview","conversation_id":null,"source_message_count":3,"method":"fixture_v1","summary_text":"固定 whale 摘要。"},
+    {"summary_type":"conversation_summary","conversation_id":"golden-conversation","source_message_count":2,"method":"fixture_v1","summary_text":"固定对话摘要。"}
+  ],
+  "raw_rows": [
+    {"title":"固定对话","source_platform":"fixture","memory_space":"whale","role":"assistant","snippet":"固定关键词记忆。","conversation_id":"golden-conversation","message_id":"golden-message"}
+  ],
+  "expected": {
+    "sections": [
+      {"name":"System","enabled":true,"item_count":1,"chars":16,"estimated_tokens":4,"preview":"[System]\n固定鲸鱼人格。"},
+      {"name":"High-level Memory Summaries - whale","enabled":true,"item_count":2,"chars":455,"estimated_tokens":114,"preview":"[High-level Memory Summaries - whale]\nExisting high-level summaries from YunOS memory_summaries. Read-only context; do not treat this as newly generated memory.\n\n1. summary_type: memory_space_overview\n   conversation_id: none\n   source_message_count: 3\n   method: fixture_v1\n   summary_text: 固定 wh..."},
+      {"name":"Relevant Memory - whale","enabled":true,"item_count":1,"chars":242,"estimated_tokens":61,"preview":"[Relevant Memory - whale]\n以下内容来自 YunOS 中用户与鲸鱼的历史对话检索结果，优先级高于通用资料。\n\n1. title: 固定对话\n   source_platform: fixture\n   memory_space: whale\n   role: assistant\n   snippet: 固定关键词记忆。\n   conversation_id: golden-conversation\n   message_id: golden-message"},
+      {"name":"Optional Context - general","enabled":false,"item_count":0,"chars":0,"estimated_tokens":0,"preview":""},
+      {"name":"User Input","enabled":true,"item_count":1,"chars":19,"estimated_tokens":5,"preview":"[User Input]\n固定黄金问题"}
+    ],
+    "totals":{"total_chars":738,"estimated_total_tokens":185,"enabled_sections":4,"summary_count":2,"raw_memory_count":1,"general_context_count":0},
+    "ordering":{"section_order":["System","High-level Memory Summaries - whale","Relevant Memory - whale","Optional Context - general","User Input"],"summary_before_raw_memory":true},
+    "prompt":"[System]\n固定鲸鱼人格。\n\n[High-level Memory Summaries - whale]\nExisting high-level summaries from YunOS memory_summaries. Read-only context; do not treat this as newly generated memory.\n\n1. summary_type: memory_space_overview\n   conversation_id: none\n   source_message_count: 3\n   method: fixture_v1\n   summary_text: 固定 whale 摘要。\n\n2. summary_type: conversation_summary\n   conversation_id: golden-c...sation\n   source_message_count: 2\n   method: fixture_v1\n   summary_text: 固定对话摘要。\n\n[Relevant Memory - whale]\n以下内容来自 YunOS 中用户与鲸鱼的历史对话检索结果，优先级高于通用资料。\n\n1. title: 固定对话\n   source_platform: fixture\n   memory_space: whale\n   role: assistant\n   snippet: 固定关键词记忆。\n   conversation_id: golden-conversation\n   message_id: golden-message\n\n[User Input]\n固定黄金问题",
+    "retrieval_mode_requested":"legacy",
+    "retrieval_mode_effective":"legacy"
+  }
+}

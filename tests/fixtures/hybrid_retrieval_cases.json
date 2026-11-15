@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {"id":"n1","query":"我们之前聊过鲸鱼和记忆吗？","query_type":"natural","expected_source_ids":["s-whale"],"keyword_results":[],"semantic_results":[{"source_id":"s-whale","source_kind":"semantic_summary","rank":1}]},
+    {"id":"n2","query":"YunOS 的记忆系统如何保存摘要？","query_type":"natural","expected_source_ids":["k-yunos","s-yunos"],"keyword_results":[{"source_id":"k-yunos","source_kind":"keyword_message","rank":1}],"semantic_results":[{"source_id":"s-yunos","source_kind":"semantic_summary","rank":1}]},
+    {"id":"n3","query":"STM32 怎样读取温度传感器？","query_type":"natural","expected_source_ids":["s-stm32"],"keyword_results":[],"semantic_results":[{"source_id":"s-stm32","source_kind":"semantic_summary","rank":1}]},
+    {"id":"n4","query":"推荐讨论未来社会的科幻小说","query_type":"natural","expected_source_ids":["k-scifi","s-scifi"],"keyword_results":[{"source_id":"k-scifi","source_kind":"keyword_message","rank":1}],"semantic_results":[{"source_id":"s-scifi","source_kind":"semantic_summary","rank":1}]},
+    {"id":"s1","query":"鲸鱼 记忆","query_type":"short","expected_source_ids":["k-whale","s-whale-short"],"keyword_results":[{"source_id":"k-whale","source_kind":"keyword_message","rank":1}],"semantic_results":[{"source_id":"s-whale-short","source_kind":"semantic_summary","rank":1}]},
+    {"id":"s2","query":"图像 生成","query_type":"short","expected_source_ids":["k-image","s-image"],"keyword_results":[{"source_id":"k-image","source_kind":"keyword_message","rank":1}],"semantic_results":[{"source_id":"s-image","source_kind":"semantic_summary","rank":1}]},
+    {"id":"s3","query":"本地 模型","query_type":"short","expected_source_ids":["k-local","s-local"],"keyword_results":[{"source_id":"k-local","source_kind":"keyword_message","rank":1}],"semantic_results":[{"source_id":"s-local","source_kind":"semantic_summary","rank":1}]},
+    {"id":"s4","query":"STM32 硬件","query_type":"short","expected_source_ids":["k-stm32","s-stm32-short"],"keyword_results":[{"source_id":"k-stm32","source_kind":"keyword_message","rank":1}],"semantic_results":[{"source_id":"s-stm32-short","source_kind":"semantic_summary","rank":1}]}
+  ]
+}

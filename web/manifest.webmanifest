@@ -1,0 +1,32 @@
+{
+  "id": "/",
+  "name": "YunOS",
+  "short_name": "YunOS",
+  "description": "YunOS 私人记忆与状态访问应用",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#f7f8fa",
+  "background_color": "#f7f8fa",
+  "icons": [
+    {
+      "src": "/icons/yunos-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/yunos-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/yunos-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

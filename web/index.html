@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8fa" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="YunOS" />
+    <title data-i18n="app.documentTitle">YunOS — 简体中文界面</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f8fafc'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='36' fill='%232563eb'%3E%E4%BA%91%3C/text%3E%3C/svg%3E" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/yunos-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/yunos-apple-touch-180.png" />
+    <link rel="stylesheet" href="/style.css?v=10-e-1" />
+  </head>
+  <body>
+    <div
+      id="pwa-host-status"
+      class="pwa-host-status"
+      role="status"
+      aria-live="polite"
+      data-i18n="pwa.hostUnavailable"
+      hidden
+    >
+      无法连接 YunOS 主机。实时内容不可用，可继续阅读有效缓存副本。
+    </div>
+    <div id="splash" class="splash-screen" aria-hidden="true" hidden>
+      <p hidden data-i18n="splash.loading">正在加载 Whale Memory System…</p>
+      <p hidden data-i18n="splash.initializing">正在初始化 memory_space=whale</p>
+    </div>
+    <div
+      id="yunos-mobile-shell"
+      class="yunos-mobile-shell"
+      data-mobile-view="home"
+      data-search-position="center"
+      data-keyboard-open="false"
+    >
+      <header class="yunos-mobile-header">
+        <span class="yunos-mobile-brand">YunOS</span>
+        <div class="yunos-mobile-header-actions">
+          <button
+            id="mobile-operational-button"
+            type="button"
+            aria-controls="mobile-operational-panel"
+            aria-expanded="false"
+            data-i18n="mobile.status"
+          >状态</button>
+          <button
+            id="mobile-cognitive-button"
+            type="button"
+            aria-controls="mobile-cognitive-panel"
+            aria-expanded="false"
+            data-i18n="cognitive.mobileTask"
+          >任务</button>
+          <button id="mobile-recent-button" type="button" data-i18n="mobile.recent">最近</button>
+        </div>
+      </header>
+
+      <section
+        class="yunos-mobile-search-stage"
+        aria-label="YunOS 移动搜索"
+        data-i18n-attr="aria-label:aria.mobileSearch"
+      >
+        <form id="mobile-search-form" role="search">
+          <div class="yunos-mobile-search-field">
+            <label
+              class="yunos-visually-hidden"
+              for="mobile-search-input"
+              data-i18n="search.memory"
+            >搜索记忆</label>
+            <input
+              id="mobile-search-input"
+              name="query"
+              type="search"
+              autocomplete="off"
+              autocapitalize="none"
+              autocorrect="off"
+              spellcheck="false"
+              enterkeyhint="search"
+              aria-describedby="mobile-search-hint"
+              aria-controls="mobile-search-results"
+              placeholder="搜索记忆"
+              data-i18n-attr="placeholder:search.memory"
+            />
+            <button
+              id="mobile-search-clear"
+              type="button"
+              aria-label="清空搜索"
+              data-i18n-attr="aria-label:search.clear"
+              hidden
+            >&times;</button>
+          </div>
+          <p id="mobile-search-hint" role="status" hidden></p>
+        </form>
+
+        <section
+          id="mobile-offline-home"
+          class="yunos-mobile-offline-home"
+          aria-labelledby="mobile-offline-title"
+          hidden
+        >
+          <h1 id="mobile-offline-title" data-i18n="offline.cachedOnlyTitle">当前仅可使用已缓存内容</h1>
+          <p data-i18n="offline.cachedOnlyBody">搜索和阅读仅使用本机仍有效的缓存副本，范围可能不完整。</p>
+          <p id="mobile-offline-status" role="status" aria-live="polite"></p>
+          <div id="mobile-offline-conversations" role="list"></div>
+        </section>
+
+        <section id="mobile-results-page" aria-labelledby="mobile-results-summary" hidden>
+          <div class="yunos-mobile-results-toolbar">
+            <h1 id="mobile-results-summary" data-i18n="search.results">搜索结果</h1>
+            <button id="mobile-sort-toggle" type="button" data-i18n="search.sortRelevance">相关度优先</button>
+          </div>
+          <section
+            id="mobile-offline-search-banner"
+            class="yunos-mobile-offline-search-banner"
+            aria-live="polite"
+            hidden
+          >
+            <strong data-i18n="offline.cachedSearchOnly">仅搜索已缓存内容</strong>
+            <span id="mobile-offline-search-coverage" data-i18n="offline.coverageLoading">缓存覆盖范围正在读取</span>
+            <span id="mobile-offline-search-updated" data-i18n="offline.cacheTimeUnknown">最近缓存时间未知</span>
+            <span data-i18n="offline.searchIncomplete">搜索范围可能不完整，语义搜索不可用。</span>
+            <span data-i18n="offline.recoverOnline">恢复网络后可搜索全部主机内容。</span>
+            <button id="mobile-search-all-host" type="button" data-i18n="offline.recoverOnline" hidden>搜索全部主机内容</button>
+          </section>
+          <p id="mobile-search-status" role="status" aria-live="polite"></p>
+          <div id="mobile-search-results" role="list"></div>
+          <div id="mobile-search-sentinel" aria-hidden="true"></div>
+          <button id="mobile-load-more" type="button" data-i18n="common.loadMore" hidden>加载更多</button>
+        </section>
+      </section>
+
+      <section
+        id="mobile-operational-panel"
+        class="yunos-mobile-operational-panel"
+        aria-labelledby="mobile-operational-title"
+        hidden
+      >
+        <header class="yunos-mobile-operational-header">
+          <div>
+            <p class="yunos-operational-kicker" data-i18n="common.localOnly">私人 · 只读</p>
+            <h1 id="mobile-operational-title" tabindex="-1" data-i18n="nav.now">当前</h1>
+          </div>
+          <button id="mobile-operational-close" type="button" data-i18n="common.close">关闭</button>
+        </header>
+        <nav
+          id="mobile-operational-nav"
+          class="yunos-mobile-operational-nav"
+          aria-label="当前状态"
+          data-i18n-attr="aria-label:nav.currentState"
+        >
+          <button type="button" data-operational-view="operationalNow" data-i18n="nav.now">当前</button>
+          <button type="button" data-operational-view="operationalProjects" data-i18n="nav.projects">项目</button>
+          <button type="button" data-operational-view="operationalWaiting" data-i18n="nav.waiting">等待</button>
+          <button type="button" data-operational-view="operationalDecisions" data-i18n="nav.decisions">决策</button>
+          <button type="button" data-operational-view="operationalDelegations" data-i18n="nav.delegations">委托</button>
+        </nav>
+        <div id="mobile-operational-content" class="yunos-mobile-operational-content" aria-live="polite"></div>
+      </section>
+
+      <section
+        id="mobile-cognitive-panel"
+        class="yunos-mobile-cognitive-panel"
+        aria-labelledby="mobile-cognitive-title"
+        data-cognitive-mobile-readonly
+        hidden
+      >
+        <header class="yunos-mobile-cognitive-header">
+          <div>
+            <p class="yunos-operational-kicker" data-i18n="cognitive.mobileReadonly">私人 · 只读</p>
+            <h1 id="mobile-cognitive-title" tabindex="-1" data-i18n="cognitive.workspaceTitle">认知任务工作区</h1>
+          </div>
+          <button id="mobile-cognitive-close" type="button" data-i18n="common.close">关闭</button>
+        </header>
+        <div
+          id="mobile-cognitive-content"
+          class="yunos-mobile-cognitive-content"
+          aria-live="polite"
+        ></div>
+      </section>
+
+      <section
+        id="mobile-conversation-reader"
+        class="yunos-mobile-conversation-reader"
+        aria-labelledby="mobile-reader-title"
+        data-topbar-visible="true"
+        hidden
+      >
+        <header id="mobile-reader-topbar" class="yunos-mobile-reader-topbar">
+          <button
+            id="mobile-reader-back"
+            type="button"
+            aria-label="返回搜索结果"
+            data-i18n-attr="aria-label:mobile.backResults"
+          ><span aria-hidden="true">‹</span> <span data-i18n="mobile.backResults">返回搜索结果</span></button>
+          <h1 id="mobile-reader-title" tabindex="-1" data-i18n="mobile.conversation">会话</h1>
+          <button
+            id="mobile-reader-hide-topbar"
+            type="button"
+            aria-label="隐藏会话顶部栏"
+            aria-controls="mobile-reader-topbar"
+            aria-expanded="true"
+            data-i18n="mobile.hideTopbar"
+            data-i18n-attr="aria-label:mobile.hideTopbar"
+          >隐藏顶部栏</button>
+        </header>
+        <button
+          id="mobile-reader-restore-topbar"
+          type="button"
+          aria-label="显示会话顶部栏"
+          aria-controls="mobile-reader-topbar"
+          aria-expanded="false"
+          data-i18n="mobile.showTopbar"
+          data-i18n-attr="aria-label:mobile.showTopbar"
+          hidden
+        >显示顶部栏</button>
+        <div id="mobile-reader-scroll" class="yunos-mobile-reader-scroll" tabindex="0">
+          <section
+            id="mobile-reader-offline-banner"
+            class="yunos-mobile-reader-offline-banner"
+            aria-live="polite"
+            hidden
+          >
+            <strong data-i18n="mobile.cachedCopyTitle">当前显示本机缓存副本</strong>
+            <span id="mobile-reader-cache-time"></span>
+            <span data-i18n="offline.cachedMayBeStale">内容可能落后于主机，当前不是实时内容。</span>
+            <button id="mobile-reader-revalidate" type="button" data-i18n="common.reload">重新加载</button>
+          </section>
+          <p id="mobile-reader-top-status" class="yunos-mobile-reader-status" role="status" aria-live="polite"></p>
+          <div id="mobile-reader-messages" class="yunos-mobile-reader-messages" role="list"></div>
+          <p id="mobile-reader-bottom-status" class="yunos-mobile-reader-status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+      <p id="mobile-cache-toast" class="yunos-mobile-cache-toast" role="status" aria-live="polite" hidden></p>
+
+      <button
+        id="mobile-recent-backdrop"
+        type="button"
+        aria-label="关闭最近记录"
+        data-i18n-attr="aria-label:aria.closeRecent"
+        hidden
+      ></button>
+      <section
+        id="mobile-recent-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mobile-recent-title"
+        hidden
+      >
+        <div class="yunos-mobile-drawer-handle" aria-hidden="true"></div>
+        <header class="yunos-mobile-recent-header">
+          <div>
+            <h2 id="mobile-recent-title" data-i18n="mobile.recentRecords">最近记录</h2>
+            <p id="mobile-recent-status" role="status" data-i18n="common.online">在线</p>
+          </div>
+          <button id="mobile-recent-clear" type="button" data-i18n="common.clear">清空</button>
+        </header>
+        <div class="yunos-mobile-recent-content">
+          <section id="mobile-recent-searches" aria-labelledby="mobile-recent-searches-title">
+            <h3 id="mobile-recent-searches-title" class="yunos-mobile-recent-heading" data-i18n="mobile.recentSearches">最近搜索</h3>
+          </section>
+          <section id="mobile-recent-conversations" aria-labelledby="mobile-recent-conversations-title">
+            <h3 id="mobile-recent-conversations-title" class="yunos-mobile-recent-heading" data-i18n="mobile.recentOpened">最近打开的会话</h3>
+          </section>
+        </div>
+      </section>
+    </div>
+    <div
+      id="yunos-desktop-shell"
+      class="yunos-desktop-shell shell"
+      data-page-state="home"
+      data-sidebar-mode="overlay"
+      data-sidebar-open="false"
+      data-sidebar-pinned="false"
+      data-sidebar-trigger="none"
+    >
+      <header class="yunos-shell-header">
+        <div class="yunos-shell-brand-slot" data-shell-slot="logo">
+          <button
+            id="shell-sidebar-toggle"
+            class="yunos-shell-brand-control"
+            type="button"
+            aria-label="展开 YunOS 侧栏"
+            aria-controls="shell-sidebar"
+            aria-expanded="false"
+            data-i18n-attr="aria-label:aria.expandSidebar"
+          >
+            <span class="yunos-shell-logo-word" aria-hidden="true">YunOS</span>
+            <span class="yunos-shell-menu-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+
+      <div class="yunos-shell-body">
+        <div class="yunos-shell-edge-slot" data-shell-slot="sidebar-edge" aria-hidden="true"></div>
+
+        <aside
+          id="shell-sidebar"
+          class="yunos-shell-sidebar sidebar"
+          aria-label="YunOS 导航与当前上下文"
+          aria-hidden="true"
+          data-i18n-attr="aria-label:aria.sidebar"
+          inert
+        >
+          <nav
+            id="shell-sidebar-nav"
+            class="yunos-sidebar-nav"
+            aria-label="YunOS 侧栏"
+            data-i18n-attr="aria-label:aria.sidebar"
+          >
+            <section class="yunos-sidebar-group" aria-labelledby="sidebar-global-title">
+              <h2 id="sidebar-global-title" class="yunos-sidebar-group-title" data-i18n="common.global">全局</h2>
+              <div id="sidebar-global-items" class="yunos-sidebar-items"></div>
+            </section>
+
+            <section class="yunos-sidebar-group yunos-sidebar-operational-group" aria-labelledby="sidebar-operational-title">
+              <h2 id="sidebar-operational-title" class="yunos-sidebar-group-title" data-i18n="nav.currentState">当前状态</h2>
+              <div id="sidebar-operational-items" class="yunos-sidebar-items"></div>
+            </section>
+
+            <section
+              id="sidebar-context-group"
+              class="yunos-sidebar-group yunos-sidebar-context-group"
+              aria-labelledby="sidebar-context-title"
+              hidden
+            >
+              <h2 id="sidebar-context-title" class="yunos-sidebar-group-title" data-i18n="common.context">当前上下文</h2>
+              <div id="sidebar-context-items" class="yunos-sidebar-items"></div>
+            </section>
+
+            <section class="yunos-sidebar-group yunos-sidebar-system-group" aria-labelledby="sidebar-system-title">
+              <h2 id="sidebar-system-title" class="yunos-sidebar-group-title" data-i18n="common.system">系统</h2>
+              <div id="sidebar-system-items" class="yunos-sidebar-items"></div>
+
+              <details id="sidebar-settings" class="yunos-sidebar-disclosure">
+                <summary data-sidebar-summary-icon="settings" data-i18n="common.settings">设置</summary>
+                <div id="sidebar-settings-items" class="yunos-sidebar-items yunos-sidebar-nested-items"></div>
+              </details>
+
+              <details id="sidebar-system-tools" class="yunos-sidebar-disclosure yunos-sidebar-tools">
+                <summary data-sidebar-summary-icon="tools" data-i18n="common.systemTools">系统工具</summary>
+                <div id="sidebar-tool-items" class="yunos-sidebar-items yunos-sidebar-nested-items"></div>
+              </details>
+            </section>
+          </nav>
+        </aside>
+
+        <main
+          class="yunos-shell-stage"
+          aria-label="YunOS 桌面应用画布"
+          data-i18n-attr="aria-label:aria.desktopCanvas"
+        >
+          <section
+            id="shell-home-region"
+            class="yunos-shell-region yunos-shell-home-region"
+            data-shell-region="home"
+            aria-label="YunOS 桌面首页"
+            data-i18n-attr="aria-label:aria.home"
+          >
+            <div
+              class="yunos-shell-omnibox-anchor"
+              data-shell-slot="omnibox"
+            >
+              <form
+                id="home-omnibox-form"
+                class="yunos-home-omnibox"
+                data-mode="search"
+                data-has-value="false"
+                aria-label="YunOS 首页 Omnibox"
+                data-i18n-attr="aria-label:aria.omnibox"
+              >
+                <label
+                  class="yunos-visually-hidden"
+                  for="home-omnibox-input"
+                  data-i18n="aria.omnibox"
+                >YunOS 首页输入</label>
+                <input
+                  id="home-omnibox-input"
+                  class="yunos-home-omnibox-input"
+                  name="query"
+                  type="text"
+                  autocomplete="off"
+                  aria-label="搜索记忆"
+                  aria-controls="home-memory-search-results"
+                  aria-expanded="false"
+                  placeholder="搜索记忆"
+                  data-i18n-attr="aria-label:search.memory;placeholder:search.memory"
+                />
+                <div
+                  class="yunos-home-omnibox-modes"
+                  role="group"
+                  aria-label="选择输入模式"
+                  data-i18n-attr="aria-label:aria.inputMode"
+                >
+                  <button
+                    class="yunos-home-omnibox-mode"
+                    type="button"
+                    data-omnibox-mode="search"
+                    aria-pressed="true"
+                    data-i18n="search.memory"
+                  >记忆搜索</button>
+                  <button
+                    class="yunos-home-omnibox-mode"
+                    type="button"
+                    data-omnibox-mode="ai"
+                    aria-pressed="false"
+                  >AI</button>
+                </div>
+              </form>
+              <section
+                id="home-memory-search-overlay"
+                class="yunos-home-memory-search-overlay"
+                aria-label="记忆搜索结果"
+                aria-live="polite"
+                data-i18n-attr="aria-label:search.results"
+                hidden
+              >
+                <div
+                  id="home-memory-search-results"
+                  class="yunos-home-memory-search-results"
+                  role="listbox"
+                  aria-label="本地记忆搜索结果"
+                  data-i18n-attr="aria-label:search.results"
+                ></div>
+              </section>
+            </div>
+
+            <section
+              id="home-ai-document"
+              class="yunos-home-ai-document"
+              data-ai-state="idle"
+              data-cognitive-workspace
+              aria-label="YunOS AI 文档结果"
+              aria-busy="false"
+              data-i18n-attr="aria-label:ai.documentResult"
+              hidden
+            >
+              <div
+                id="home-ai-document-status"
+                class="yunos-home-ai-document-status"
+                role="status"
+                aria-live="polite"
+              ></div>
+              <article
+                id="home-ai-document-content"
+                class="yunos-home-ai-document-content"
+              ></article>
+              <template id="cognitive-workspace-contract">
+                <section data-cognitive-section="objective"><h2>目标理解</h2></section>
+                <section data-cognitive-section="success"><h2>成功标准</h2></section>
+                <section data-cognitive-section="prohibited"><h2>明确不做</h2></section>
+                <section data-cognitive-section="context"><h2>使用的个人上下文</h2></section>
+                <section data-cognitive-section="plan"><h2>计划</h2></section>
+                <section data-cognitive-section="decisions"><h2>决策点</h2></section>
+                <section data-cognitive-section="execution"><h2>当前执行</h2></section>
+                <section data-cognitive-section="verification"><h2>验证</h2></section>
+                <section data-cognitive-section="outcome"><h2>结果</h2></section>
+                <section data-cognitive-section="learning"><h2>学习候选</h2></section>
+                <aside data-cognitive-supervision>监督与权限</aside>
+              </template>
+            </section>
+          </section>
+
+          <section
+            id="shell-workspace-region"
+            class="yunos-shell-region yunos-shell-workspace-region main"
+            data-shell-region="workspace"
+            aria-label="YunOS 现有功能工作区"
+            aria-hidden="true"
+            data-i18n-attr="aria-label:aria.desktopCanvas"
+            inert
+          >
+            <section class="topbar">
+              <div>
+                <p class="eyebrow" data-i18n="common.localOnly">仅限 127.0.0.1 本机访问</p>
+                <h2 id="view-title" data-i18n="mobile.recentConversations">最近对话</h2>
+              </div>
+              <div class="db-status" aria-live="polite">
+                <div id="db-mode" class="status-pill" data-i18n="status.loading">数据库模式：加载中</div>
+                <div id="db-warning" class="db-warning hidden" role="alert" data-i18n="status.loading">正在读取数据库模式。</div>
+              </div>
+            </section>
+
+            <section id="content" class="content"></section>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <template id="empty-template">
+      <div class="empty-card" data-i18n="common.noRecords">没有找到记录。</div>
+    </template>
+
+    <script src="/i18n/en.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/en-shell-mobile-extra.js?v=10-e-2"></script>
+    <script src="/i18n/zh-CN-shell-mobile-extra.js?v=10-e-2"></script>
+    <script src="/i18n/en-legacy-core.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN-legacy-core.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/en-legacy-tools.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN-legacy-tools.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/en-operational-extra.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/zh-CN-operational-extra.js?v=9-0-1-i18n-3"></script>
+    <script src="/i18n/index.js?v=9-0-1-i18n-3"></script>
+    <script src="/pwa.js?v=9-0-1-i18n-3"></script>
+    <script src="/offline-cache.js?v=9-0-1-i18n-3"></script>
+    <script src="/app.js?v=10-e-3"></script>
+  </body>
+</html>

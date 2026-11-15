@@ -1,0 +1,22 @@
+:root { font-family: "Segoe UI", "Microsoft YaHei", sans-serif; color: #233c36; background: #f4f2ed; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; padding: 52px 56px 40px; }
+header { display: flex; align-items: center; gap: 14px; font-size: 26px; font-weight: 600; letter-spacing: -.5px; }
+header img { width: 44px; height: 44px; border-radius: 12px; }
+main { width: 100%; margin: auto 0; padding-top: 44px; }
+section { background: #fffdf8; border: 1px solid #dedfd5; border-radius: 14px; padding: 23px 22px; margin-bottom: 20px; }
+.status { display: flex; align-items: center; gap: 12px; }
+.status strong { font-size: 14px; font-weight: 500; line-height: 1.6; overflow-wrap: anywhere; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #bd9142; flex-shrink: 0; }
+.dot.ready { background: #4a7b60; }
+.dot.error { background: #ae5647; }
+.badge { font-size: 11px; color: #79847b; margin-left: auto; white-space: nowrap; }
+button { font-family: inherit; cursor: pointer; transition: background .15s ease; }
+#open { width: 100%; min-height: 50px; border: 0; border-radius: 10px; background: #294d40; color: #fff; padding: 14px; font-size: 15px; font-weight: 500; }
+#open:hover:not(:disabled) { background: #365e4e; }
+#open:disabled { background: #8d9d94; cursor: wait; }
+nav { display: flex; justify-content: center; gap: 24px; margin-top: 18px; }
+nav button { border: 0; background: none; color: #68776e; font-size: 12px; padding: 8px 12px; border-radius: 6px; }
+nav button:hover { background: #e9ece4; }
+button:focus-visible { outline: 2px solid #758a76; outline-offset: 3px; }
+@media (max-width: 540px) { body { padding: 36px 30px 28px; } .badge { display: none; } }
